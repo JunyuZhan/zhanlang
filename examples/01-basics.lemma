@@ -1,0 +1,45 @@
+// 纯函数与 spec：最基本的用法
+module basics
+
+fn max(a: Int, b: Int) -> Int
+  spec {
+    post result >= a
+    post result >= b
+    post result == a || result == b
+    examples {
+      max(1, 2) == 2
+      max(5, 5) == 5
+      max(0, -3) == 0
+    }
+  }
+{
+  if a >= b { a } else { b }
+}
+
+fn discount(price: Int, rate: Int) -> Int
+  spec {
+    pre price > 0
+    pre 0 <= rate <= 100
+    post result == (price * (100 - rate)) / 100
+    post result <= price
+    examples {
+      discount(100, 10) == 90
+      discount(1, 0) == 1
+    }
+  }
+{
+  (price * (100 - rate)) / 100
+}
+
+fn factorial(n: Int) -> Int
+  spec {
+    pre n >= 0
+    post result > 0
+    examples {
+      factorial(0) == 1
+      factorial(5) == 120
+    }
+  }
+{
+  if n == 0 { 1 } else { n * factorial(n - 1) }
+}

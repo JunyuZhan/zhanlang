@@ -12,9 +12,11 @@
 
 ## 目录
 
-- [docs/white-paper.md](docs/white-paper.md) — 语言定义（主规格书）
+- [docs/white-paper.md](docs/white-paper.md) — 白皮书（为什么做这门语言）
+- [docs/spec.md](docs/spec.md) — 语言规格书（完整语法与语义定义）
 - [docs/decisions.md](docs/decisions.md) — 源对话结论纪要
 - [docs/review-notes.md](docs/review-notes.md) — 早期评审与决策依据
+- [examples/](examples/) — 示例程序
 - docs/experiments/ — 实验记录（待补）
 
 ## 路线图
@@ -23,4 +25,4 @@ M1 解析与类型检查 → M2 spec 自检器 → M3 运行时断言 → M4 最
 
 ## 如何参与
 
-先读 [docs/white-paper.md](docs/white-paper.md) 的语言定义，再读 [docs/decisions.md](docs/decisions.md) 与 [docs/review-notes.md](docs/review-notes.md) 了解来龙去脉。实现与语言定义以规格书为准。
+先读 [docs/white-paper.md](docs/white-paper.md) 了解为什么，再读 [docs/spec.md](docs/spec.md) 了解语言本身。实现与语言定义以规格书为准。
