@@ -9,6 +9,10 @@ enum RegError {
   EmailTaken
 }
 
+enum EmailEvent {
+  EmailQueued(email: String)
+}
+
 fn register(email: String, password: String) -> Result<UserId, RegError>
   io
   spec {

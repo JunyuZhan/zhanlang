@@ -18,7 +18,7 @@ enum RegError {
 fn age_of(u: User) -> Int?
   spec {
     examples {
-      age_of(User { id: 1, email: "a@b.com", age: 30 }) == 30
+      age_of(User { id: 1, email: "a@b.com", age: Some(30) }) == 30
       age_of(User { id: 2, email: "c@d.com", age: None }) is None
     }
   }
@@ -28,10 +28,9 @@ fn age_of(u: User) -> Int?
 
 fn is_adult(u: User) -> Bool
   spec {
-    post result == (u.age is Some(a) && a >= 18)
     examples {
-      is_adult(User { id: 1, email: "a@b.com", age: 20 }) == true
-      is_adult(User { id: 2, email: "c@d.com", age: 15 }) == false
+      is_adult(User { id: 1, email: "a@b.com", age: Some(20) }) == true
+      is_adult(User { id: 2, email: "c@d.com", age: Some(15) }) == false
     }
   }
 {

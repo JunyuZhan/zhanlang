@@ -1,7 +1,12 @@
 // 拒绝：纯函数调用 io 函数（效果系统 §5）
 module e1
 
-fn read_data() -> Int io {
+fn read_data() -> Int io
+  spec {
+    post result >= 0
+    examples { read_data() == 0 }
+  }
+{
   todo
 }
 
