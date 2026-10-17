@@ -123,6 +123,10 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; }
   color: var(--ink); border-radius: var(--radius);
 }
 .theme-toggle:hover { box-shadow: 0 0 0 1px var(--hairline); }
+.theme-toggle svg { display: block; }
+.icon-sun { display: none; }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="dark"] .icon-sun { display: block; }
 
 /* 代码 */
 pre {
