@@ -1,0 +1,30 @@
+// 带 IO 的函数：效果声明与状态词汇
+module io_example
+
+type UserId = Int
+
+enum RegError {
+  InvalidEmail(email: String)
+  WeakPassword
+  EmailTaken
+}
+
+enum EmailEvent {
+  EmailQueued(email: String)
+}
+
+fn register(email: String, password: String) -> Result<UserId, RegError>
+  io
+  spec {
+    pre email.contains("@")
+    pre password.len >= 8
+    modifies db
+    post result is Ok || result is Err(EmailTaken)
+    post events.contains(EmailQueued(email)) || result is Err
+    examples {
+      register("a@b.com", "abcdefgh") is Ok
+    }
+  }
+{
+  todo
+}

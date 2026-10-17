@@ -1,0 +1,41 @@
+// 记录、枚举与空安全
+module records
+
+type UserId = Int
+
+type User = record {
+  id: UserId
+  email: String
+  age: Int?
+}
+
+enum RegError {
+  InvalidEmail(email: String)
+  WeakPassword
+  EmailTaken
+}
+
+fn age_of(u: User) -> Int?
+  spec {
+    examples {
+      age_of(User { id: 1, email: "a@b.com", age: Some(30) }) == Some(30)
+      age_of(User { id: 2, email: "c@d.com", age: None }) is None
+    }
+  }
+{
+  u.age
+}
+
+fn is_adult(u: User) -> Bool
+  spec {
+    examples {
+      is_adult(User { id: 1, email: "a@b.com", age: Some(20) }) == true
+      is_adult(User { id: 2, email: "c@d.com", age: Some(15) }) == false
+    }
+  }
+{
+  match u.age {
+    Some(a) => a >= 18
+    None => false
+  }
+}

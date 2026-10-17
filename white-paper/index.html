@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>白皮书 · Lemma</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
+<link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="../"><span class="tri">▲</span>Lemma</a>
+  <div class="links">
+    <a href="../spec/">规格书</a>
+    <a href="../white-paper/">白皮书</a>
+    <a href="../play/">Playground</a>
+    <a href="https://github.com/JunyuZhan/Lemma">GitHub</a>
+  </div>
+</nav>
+<div class="doc-layout">
+<aside class="doc-toc">
+  <div class="toc-title">目录</div>
+  <ul>
+  <li><a href="#lemma-白皮书" id="toc-lemma-白皮书">Lemma 白皮书</a>
+  <ul>
+  <li><a href="#一句话" id="toc-一句话">一句话</a></li>
+  <li><a href="#我们解决什么问题"
+  id="toc-我们解决什么问题">我们解决什么问题</a></li>
+  <li><a href="#第一性原理与设计原则"
+  id="toc-第一性原理与设计原则">第一性原理与设计原则</a></li>
+  <li><a href="#核心不变量" id="toc-核心不变量">核心不变量</a></li>
+  <li><a href="#不是什么" id="toc-不是什么">不是什么</a></li>
+  <li><a href="#路线图" id="toc-路线图">路线图</a></li>
+  <li><a href="#与既有工作的关系"
+  id="toc-与既有工作的关系">与既有工作的关系</a></li>
+  </ul></li>
+  </ul>
+</aside>
+<article class="doc-content">
+<h1 id="lemma-白皮书">Lemma 白皮书</h1>
+<blockquote>
+<p>版本：v0.1</p>
+<p>日期：2026-10-17</p>
+<p>本文讲「为什么做这门语言」。完整语法与语义定义见 <a
+href="../spec.md">spec.md</a>。</p>
+</blockquote>
+<h2 id="一句话">一句话</h2>
+<p>Lemma 是一门面向 vibe coding 的编程语言：AI
+写实现，人和编译器共同验证意图——而且意图本身也是被验证的对象。</p>
+<h2 id="我们解决什么问题">我们解决什么问题</h2>
+<p>vibe coding
+把人的角色从「编写者」变成「意图提供者与审阅者」。这个转变暴露了一个结构性缺口：AI
+生成代码的典型失败模式——幻觉
+API、边界错误、与意图漂移——无法在生成过程中被有效拦截。</p>
+<p>现有语言的反馈通道（类型系统、测试、运行时断言、文档）全部发生在代码生成之后，且彼此独立维护。一份意图被重复表达四次，就会产生四份漂移。Lemma
+回答一个直觉：如果意图只被表达一次，且这份表达同时是规格、测试、文档与断言，漂移是否就从物理上被消灭了？</p>
+<h2 id="第一性原理与设计原则">第一性原理与设计原则</h2>
+<p>本语言只服从四条要求，不服从任何「特性拼盘」：</p>
+<ol type="1">
+<li>解决真实问题，不是拼盘。不为「综合各家之长」而堆特性，只解决四份产物漂移这一个问题。</li>
+<li>AI 与 vibe coding 优先。把「AI
+是主要代码作者、人类提供意图并审阅」当作默认前提。</li>
+<li>第一性原理。先定义不可违反的不变量，再推导语法与工具链；语法和类型都为不变量服务。</li>
+<li>可被他人与 AI 实现。定义是结构化的、可执行验收的，不是散文。</li>
+</ol>
+<h2 id="核心不变量">核心不变量</h2>
+<blockquote>
+<p>每个对外可见的函数必须携带 <code>spec</code>；<code>spec</code>
+是唯一真相源；编译器在构造期同时做两件验证——验证实现满足 spec，验证 spec
+本身不是空洞、矛盾或不可达的。</p>
+</blockquote>
+<p>这条不变量的两个半边同样重要：</p>
+<ul>
+<li>左半边（实现 ⊨ spec）：让规格、测试、文档、断言共享一份表达。</li>
+<li>右半边（spec 自检）：因为 vibe coding 里 AI 写的 spec
+同样会空洞、自相矛盾，编译器必须像审查实现一样审查 spec。</li>
+</ul>
+<p>早期纸面实验的教训已并入设计：spec
+表达式必须能谈论状态与副作用（<code>old</code> / <code>modifies</code> /
+<code>events</code>），否则真实业务意图无法承载。</p>
+<h2 id="不是什么">不是什么</h2>
+<p>刻意不做的，以避免拼盘：类继承、隐式类型转换、默认动态类型、隐式效果、宏、多分派。每一样被砍掉，都对应一个「别的语言已经有、但与本语言的核心问题无关」的特性。</p>
+<h2 id="路线图">路线图</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>里程碑</th>
+<th>内容</th>
+<th>验收标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>M1 解析与类型检查</td>
+<td>文法与类型/效果检查</td>
+<td>示例程序全部通过</td>
+</tr>
+<tr>
+<td>M2 spec 自检器</td>
+<td>非空洞、可达性、样例一致性、引用合法性</td>
+<td>构造的空洞/矛盾/不可达 spec 均被拒绝</td>
+</tr>
+<tr>
+<td>M3 运行时断言</td>
+<td><code>checked</code> 层级插入断言</td>
+<td>违反 spec 的实现在运行期被捕获</td>
+</tr>
+<tr>
+<td>M4 静态验证器</td>
+<td><code>verified</code> 层级的最小符号执行（线性/结构化子集 + if
+分支展开）</td>
+<td><code>max</code> 被静态证明；非线性/递归函数回退
+<code>checked</code></td>
+</tr>
+<tr>
+<td>M5 状态词汇</td>
+<td><code>old</code> / <code>modifies</code> / <code>events</code>
+的放置规则与运行时语义</td>
+<td>示例 03、06 可写且可被检查</td>
+</tr>
+</tbody>
+</table>
+<p>每个里程碑都有对应的 conformance
+测试，任何实现（不限于官方参考实现）跑通即合格。</p>
+<h2 id="与既有工作的关系">与既有工作的关系</h2>
+<p>Lemma
+不试图发明新的证明理论，而是把成熟构件（契约式设计、效果系统、框架约束、样例蕴含检查）以「spec
+自检」为轴重新组合。真正的创新点是那条双半边不变量：历史上工具要么验证实现、要么假设
+spec 正确，Lemma 把「spec 本身会被 AI 写错」当作一等问题来对待。</p>
+</article>
+</div>
+<footer class="footer">
+  <a href="https://github.com/JunyuZhan/Lemma">GitHub 仓库</a>
+  <span>内容与 <a href="https://github.com/JunyuZhan/Lemma">origin/main</a> 同步</span>
+</footer>
+</body>
+</html>
