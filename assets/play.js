@@ -1,4 +1,4 @@
-import { loadLemma } from "./lemma-abi.mjs";
+import { loadZl } from "./zl-abi.mjs";
 
 const ZH = {
   ok: "✓ 检查通过",
@@ -79,7 +79,7 @@ function scheduleCheck() {
 editor.addEventListener("input", scheduleCheck);
 
 select.addEventListener("change", async () => {
-  const resp = await fetch(new URL(`./examples/${select.value}.lemma`, base));
+  const resp = await fetch(new URL(`./examples/${select.value}.zl`, base));
   editor.value = await resp.text();
   runCheck();
 });
@@ -87,9 +87,9 @@ select.addEventListener("change", async () => {
 (async () => {
   status.textContent = L.loading;
   try {
-    mod = await loadLemma(new URL("./lemma.wasm", base).href);
+    mod = await loadZl(new URL("./zl.wasm", base).href);
     status.textContent = L.ready;
-    const first = await fetch(new URL(`./examples/${EXAMPLES[0][0]}.lemma`, base));
+    const first = await fetch(new URL(`./examples/${EXAMPLES[0][0]}.zl`, base));
     editor.value = await first.text();
     select.value = EXAMPLES[0][0];
     await runCheck();

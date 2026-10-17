@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lemma 官网构建：内容一律取自 origin/main，绝不读工作区副本。
+# zhanlang 官网构建：内容一律取自 origin/main，绝不读工作区副本。
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -20,7 +20,7 @@ git show origin/main:docs/white-paper.zh-CN.md > "$TMP/white-paper.zh.md"
 mkdir -p assets/examples
 EXAMPLES="01-basics 02-records 03-io 04-batch 05-private-trusted 06-old"
 for name in $EXAMPLES; do
-  git show "origin/main:examples/$name.lemma" > "assets/examples/$name.lemma"
+  git show "origin/main:examples/$name.zl" > "assets/examples/$name.zl"
 done
 
 # 3) 文档渲染（EN 默认 + ZH）
@@ -47,27 +47,29 @@ echo "文档构建完成: spec/ white-paper/ zh/spec/ zh/white-paper/"
 # 4) WASM 构建（不改 Cargo.toml：命令行注入 cdylib）
 export PATH="$(dirname "$(rustup which rustc)"):$(dirname "$(rustup which cargo)"):$PATH"
 cargo rustc --release --lib --target wasm32-unknown-unknown -- --crate-type cdylib
-cp target/wasm32-unknown-unknown/release/deps/lemma-*.wasm assets/lemma.wasm
-echo "WASM 构建完成: assets/lemma.wasm"
+cp target/wasm32-unknown-unknown/release/deps/zhanlang-*.wasm assets/zl.wasm
+echo "WASM 构建完成: assets/zl.wasm"
 
 # 5) 首页（示例代码取自 origin/main 的 01-basics 中 fn max 段）
 mkdir -p "$TMP" zh
-awk '/^fn max/,/^}/' assets/examples/01-basics.lemma > "$TMP/example.lemma"
-awk -v ex="$TMP/example.lemma" '
+awk '/^fn max/,/^}/' assets/examples/01-basics.zl > "$TMP/example.zl"
+awk -v ex="$TMP/example.zl" '
   /@@EXAMPLE@@/ { while ((getline line < ex) > 0) print line; close(ex); next }
   { print }
 ' site/templates/home.md > "$TMP/home.md"
-awk -v ex="$TMP/example.lemma" '
+awk -v ex="$TMP/example.zl" '
   /@@EXAMPLE@@/ { while ((getline line < ex) > 0) print line; close(ex); next }
   { print }
 ' site/templates/home.zh-CN.md > "$TMP/home.zh.md"
 pandoc "$TMP/home.md" --template site/templates/home.html \
   --metadata basecommit="$(git rev-parse --short origin/main)" \
+  --metadata description="zhanlang is a programming language for vibe coding: every visible function carries a spec, and the compiler verifies both the implementation and the spec itself." \
   --metadata lang=en --metadata root="./" \
   --metadata switch-url="zh/" --metadata switch-label="中文" \
   -o index.html
 pandoc "$TMP/home.zh.md" --template site/templates/home.html \
   --metadata basecommit="$(git rev-parse --short origin/main)" \
+  --metadata description="zhanlang（詹语言）是面向 vibe coding 的编程语言：每个可见函数必须携带 spec，编译器同时验证实现与 spec 本身。" \
   --metadata lang=zh-CN --metadata root="../" \
   --metadata switch-url="../" --metadata switch-label="English" \
   -o zh/index.html

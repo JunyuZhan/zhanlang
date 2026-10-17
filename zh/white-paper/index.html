@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>白皮书 · Lemma</title>
+<title>白皮书 · zhanlang</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
 <link rel="stylesheet" href="../../assets/theme.css">
 </head>
 <body>
 <nav class="nav">
-  <a class="brand" href="../../"><span class="tri">▲</span>Lemma</a>
+  <a class="brand" href="../../"><span class="tri">▲</span>zhanlang</a>
   <div class="links">
     <a href="../../spec/">Spec</a>
     <a href="../../white-paper/">Whitepaper</a>
     <a href="../../play/">Playground</a>
-    <a href="https://github.com/JunyuZhan/Lemma">GitHub</a>
+    <a href="https://github.com/JunyuZhan/zhanlang">GitHub</a>
   </div>
   <div class="spacer"></div>
   <a href="../../white-paper/">English</a>
@@ -24,7 +24,8 @@
 <aside class="doc-toc">
   <div class="toc-title">目录</div>
   <ul>
-  <li><a href="#lemma-白皮书" id="toc-lemma-白皮书">Lemma 白皮书</a>
+  <li><a href="#zhanlang詹语言白皮书"
+  id="toc-zhanlang詹语言白皮书">zhanlang（詹语言）白皮书</a>
   <ul>
   <li><a href="#一句话" id="toc-一句话">一句话</a></li>
   <li><a href="#我们解决什么问题"
@@ -40,7 +41,7 @@
   </ul>
 </aside>
 <article class="doc-content">
-<h1 id="lemma-白皮书">Lemma 白皮书</h1>
+<h1 id="zhanlang詹语言白皮书">zhanlang（詹语言）白皮书</h1>
 <blockquote>
 <p>版本：v0.1</p>
 <p>日期：2026-10-17</p>
@@ -48,14 +49,14 @@
 href="white-paper.md">white-paper.md</a> 为规范</strong>。</p>
 </blockquote>
 <h2 id="一句话">一句话</h2>
-<p>Lemma 是一门面向 vibe coding 的编程语言：AI
+<p>zhanlang 是一门面向 vibe coding 的编程语言：AI
 写实现，人和编译器共同验证意图——而且意图本身也是被验证的对象。</p>
 <h2 id="我们解决什么问题">我们解决什么问题</h2>
 <p>vibe coding
 把人的角色从「编写者」变成「意图提供者与审阅者」。这个转变暴露了一个结构性缺口：AI
 生成代码的典型失败模式——幻觉
 API、边界错误、与意图漂移——无法在生成过程中被有效拦截。</p>
-<p>现有语言的反馈通道（类型系统、测试、运行时断言、文档）全部发生在代码生成之后，且彼此独立维护。一份意图被重复表达四次，就会产生四份漂移。Lemma
+<p>现有语言的反馈通道（类型系统、测试、运行时断言、文档）全部发生在代码生成之后，且彼此独立维护。一份意图被重复表达四次，就会产生四份漂移。zhanlang
 回答一个直觉：如果意图只被表达一次，且这份表达同时是规格、测试、文档与断言，漂移是否就从物理上被消灭了？</p>
 <h2 id="第一性原理与设计原则">第一性原理与设计原则</h2>
 <p>本语言只服从四条要求，不服从任何「特性拼盘」：</p>
@@ -131,15 +132,15 @@ API、边界错误、与意图漂移——无法在生成过程中被有效拦�
 <p>每个里程碑都有对应的 conformance
 测试，任何实现（不限于官方参考实现）跑通即合格。</p>
 <h2 id="与既有工作的关系">与既有工作的关系</h2>
-<p>Lemma
+<p>zhanlang
 不试图发明新的证明理论，而是把成熟构件（契约式设计、效果系统、框架约束、样例蕴含检查）以「spec
 自检」为轴重新组合。真正的创新点是那条双半边不变量：历史上工具要么验证实现、要么假设
-spec 正确，Lemma 把「spec 本身会被 AI 写错」当作一等问题来对待。</p>
+spec 正确，zhanlang 把「spec 本身会被 AI 写错」当作一等问题来对待。</p>
 </article>
 </div>
 <footer class="footer">
-  <a href="https://github.com/JunyuZhan/Lemma">GitHub repository</a>
-  <span>Synced from <a href="https://github.com/JunyuZhan/Lemma">origin/main</a></span>
+  <a href="https://github.com/JunyuZhan/zhanlang">GitHub repository</a>
+  <span>Synced from <a href="https://github.com/JunyuZhan/zhanlang">origin/main</a></span>
 </footer>
 </body>
 </html>

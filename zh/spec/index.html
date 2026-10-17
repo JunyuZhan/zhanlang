@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>语言规格书 · Lemma</title>
+<title>语言规格书 · zhanlang</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
 <link rel="stylesheet" href="../../assets/theme.css">
 </head>
 <body>
 <nav class="nav">
-  <a class="brand" href="../../"><span class="tri">▲</span>Lemma</a>
+  <a class="brand" href="../../"><span class="tri">▲</span>zhanlang</a>
   <div class="links">
     <a href="../../spec/">Spec</a>
     <a href="../../white-paper/">Whitepaper</a>
     <a href="../../play/">Playground</a>
-    <a href="https://github.com/JunyuZhan/Lemma">GitHub</a>
+    <a href="https://github.com/JunyuZhan/zhanlang">GitHub</a>
   </div>
   <div class="spacer"></div>
   <a href="../../spec/">English</a>
@@ -24,8 +24,8 @@
 <aside class="doc-toc">
   <div class="toc-title">目录</div>
   <ul>
-  <li><a href="#lemma-语言规格书" id="toc-lemma-语言规格书">Lemma
-  语言规格书</a>
+  <li><a href="#zhanlang詹语言语言规格书"
+  id="toc-zhanlang詹语言语言规格书">zhanlang（詹语言）语言规格书</a>
   <ul>
   <li><a href="#目录" id="toc-目录">目录</a></li>
   <li><a href="#词法" id="toc-词法">1. 词法</a>
@@ -74,7 +74,7 @@
   </ul>
 </aside>
 <article class="doc-content">
-<h1 id="lemma-语言规格书">Lemma 语言规格书</h1>
+<h1 id="zhanlang詹语言语言规格书">zhanlang（詹语言）语言规格书</h1>
 <blockquote>
 <p>版本：v0.1</p>
 <p>日期：2026-10-17</p>
@@ -213,7 +213,7 @@ field      := ident &quot;:&quot; expr</code></pre>
 <p>任何对 <code>T?</code>
 的直接字段访问或运算都是类型错误。唯一解包途径是
 <code>match</code>：</p>
-<pre class="lemma"><code>match u.age {
+<pre class="zhanlang"><code>match u.age {
   Some(a) =&gt; a &gt;= 18
   None =&gt; false
 }</code></pre>
@@ -333,7 +333,7 @@ checked」，不允许无声降级。任何一层都不会改变 spec
 </ul>
 <h2 id="示例">8. 示例</h2>
 <p>可运行的示例见仓库 <a href="examples/">examples/</a>。核心两个：</p>
-<pre class="lemma"><code>fn max(a: Int, b: Int) -&gt; Int
+<pre class="zhanlang"><code>fn max(a: Int, b: Int) -&gt; Int
   spec {
     post result &gt;= a
     post result &gt;= b
@@ -346,7 +346,7 @@ checked」，不允许无声降级。任何一层都不会改变 spec
 {
   if a &gt;= b { a } else { b }
 }</code></pre>
-<pre class="lemma"><code>fn register(email: String, password: String) -&gt; Result&lt;UserId, RegError&gt;
+<pre class="zhanlang"><code>fn register(email: String, password: String) -&gt; Result&lt;UserId, RegError&gt;
   io
   spec {
     pre email.contains(&quot;@&quot;)
@@ -376,8 +376,8 @@ spec 自检；</li>
 </article>
 </div>
 <footer class="footer">
-  <a href="https://github.com/JunyuZhan/Lemma">GitHub repository</a>
-  <span>Synced from <a href="https://github.com/JunyuZhan/Lemma">origin/main</a></span>
+  <a href="https://github.com/JunyuZhan/zhanlang">GitHub repository</a>
+  <span>Synced from <a href="https://github.com/JunyuZhan/zhanlang">origin/main</a></span>
 </footer>
 </body>
 </html>

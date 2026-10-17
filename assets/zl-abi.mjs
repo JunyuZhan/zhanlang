@@ -1,10 +1,10 @@
-// Lemma WASM ABI 封装：浏览器与 Node 通用。
+// zhanlang WASM ABI 封装：浏览器与 Node 通用。
 // ABI 约定（与 src/lib.rs wasm 壳一致）：
-//   lemma_check(ptr, len) -> NUL 结尾 UTF-8 指针（Rust 侧分配）
-//   lemma_free(ptr, len)  -> len 为含尾部 NUL 的字节数
+//   zl_check(ptr, len) -> NUL 结尾 UTF-8 指针（Rust 侧分配）
+//   zl_free(ptr, len)  -> len 为含尾部 NUL 的字节数
 // 输入缓冲：JS 管理的 64KB scratch 页循环复用，零泄漏。
 
-export async function loadLemma(source) {
+export async function loadZl(source) {
   let bytes;
   if (typeof source === "string") {
     const resp = await fetch(source);
@@ -20,9 +20,9 @@ export async function loadLemma(source) {
   }
 
   const { instance } = await WebAssembly.instantiate(bytes, {});
-  const { lemma_check, lemma_free, memory } = instance.exports;
-  if (typeof lemma_check !== "function" || typeof lemma_free !== "function") {
-    throw new Error("WASM 缺少 lemma_check/lemma_free 导出");
+  const { zl_check, zl_free, memory } = instance.exports;
+  if (typeof zl_check !== "function" || typeof zl_free !== "function") {
+    throw new Error("WASM 缺少 zl_check/zl_free 导出");
   }
 
   let scratchPtr = 0;
@@ -47,12 +47,12 @@ export async function loadLemma(source) {
       if (input.length > 0) {
         new Uint8Array(memory.buffer, ptr, input.length).set(input);
       }
-      const outPtr = lemma_check(ptr, input.length);
+      const outPtr = zl_check(ptr, input.length);
       const view = new Uint8Array(memory.buffer);
       let end = outPtr;
       while (view[end] !== 0) end++;
       const text = decoder.decode(view.subarray(outPtr, end));
-      lemma_free(outPtr, end - outPtr + 1);
+      zl_free(outPtr, end - outPtr + 1);
       return text;
     },
   };

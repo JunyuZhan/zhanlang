@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Language specification · Lemma</title>
+<title>Language specification · zhanlang</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
 <link rel="stylesheet" href="../assets/theme.css">
 </head>
 <body>
 <nav class="nav">
-  <a class="brand" href="../"><span class="tri">▲</span>Lemma</a>
+  <a class="brand" href="../"><span class="tri">▲</span>zhanlang</a>
   <div class="links">
     <a href="../spec/">Spec</a>
     <a href="../white-paper/">Whitepaper</a>
     <a href="../play/">Playground</a>
-    <a href="https://github.com/JunyuZhan/Lemma">GitHub</a>
+    <a href="https://github.com/JunyuZhan/zhanlang">GitHub</a>
   </div>
   <div class="spacer"></div>
   <a href="../zh/spec/">中文</a>
@@ -24,8 +24,9 @@
 <aside class="doc-toc">
   <div class="toc-title">目录</div>
   <ul>
-  <li><a href="#lemma-language-specification"
-  id="toc-lemma-language-specification">Lemma Language Specification</a>
+  <li><a href="#zhanlang-language-specification"
+  id="toc-zhanlang-language-specification">zhanlang Language
+  Specification</a>
   <ul>
   <li><a href="#table-of-contents" id="toc-table-of-contents">Table of
   contents</a></li>
@@ -94,11 +95,12 @@
   </ul>
 </aside>
 <article class="doc-content">
-<h1 id="lemma-language-specification">Lemma Language Specification</h1>
+<h1 id="zhanlang-language-specification">zhanlang Language
+Specification</h1>
 <blockquote>
 <p>Version: v0.1</p>
 <p>Date: 2026-10-17</p>
-<p>This document is the normative definition of Lemma. Where an
+<p>This document is the normative definition of zhanlang. Where an
 implementation conflicts with this document, this document wins;
 anything left undefined here is “unspecified” and an implementation may
 choose freely, but must document its choice.</p>
@@ -249,7 +251,7 @@ implementation-documented and not guaranteed.</li>
 <h3 id="null-safety">3.3 Null safety</h3>
 <p>Any direct field access or operation on <code>T?</code> is a type
 error. The only way to unwrap is <code>match</code>:</p>
-<pre class="lemma"><code>match u.age {
+<pre class="zhanlang"><code>match u.age {
   Some(a) =&gt; a &gt;= 18
   None =&gt; false
 }</code></pre>
@@ -392,7 +394,7 @@ toward zero).</li>
 <h2 id="examples">8. Examples</h2>
 <p>Runnable examples live in <a href="examples/">examples/</a>. Two core
 ones:</p>
-<pre class="lemma"><code>fn max(a: Int, b: Int) -&gt; Int
+<pre class="zhanlang"><code>fn max(a: Int, b: Int) -&gt; Int
   spec {
     post result &gt;= a
     post result &gt;= b
@@ -405,7 +407,7 @@ ones:</p>
 {
   if a &gt;= b { a } else { b }
 }</code></pre>
-<pre class="lemma"><code>fn register(email: String, password: String) -&gt; Result&lt;UserId, RegError&gt;
+<pre class="zhanlang"><code>fn register(email: String, password: String) -&gt; Result&lt;UserId, RegError&gt;
   io
   spec {
     pre email.contains(&quot;@&quot;)
@@ -438,8 +440,8 @@ href="conformance/README.md">conformance/README.md</a>.</p>
 </article>
 </div>
 <footer class="footer">
-  <a href="https://github.com/JunyuZhan/Lemma">GitHub repository</a>
-  <span>Synced from <a href="https://github.com/JunyuZhan/Lemma">origin/main</a></span>
+  <a href="https://github.com/JunyuZhan/zhanlang">GitHub repository</a>
+  <span>Synced from <a href="https://github.com/JunyuZhan/zhanlang">origin/main</a></span>
 </footer>
 </body>
 </html>

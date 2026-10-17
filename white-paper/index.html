@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Whitepaper · Lemma</title>
+<title>Whitepaper · zhanlang</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
 <link rel="stylesheet" href="../assets/theme.css">
 </head>
 <body>
 <nav class="nav">
-  <a class="brand" href="../"><span class="tri">▲</span>Lemma</a>
+  <a class="brand" href="../"><span class="tri">▲</span>zhanlang</a>
   <div class="links">
     <a href="../spec/">Spec</a>
     <a href="../white-paper/">Whitepaper</a>
     <a href="../play/">Playground</a>
-    <a href="https://github.com/JunyuZhan/Lemma">GitHub</a>
+    <a href="https://github.com/JunyuZhan/zhanlang">GitHub</a>
   </div>
   <div class="spacer"></div>
   <a href="../zh/white-paper/">中文</a>
@@ -24,8 +24,8 @@
 <aside class="doc-toc">
   <div class="toc-title">目录</div>
   <ul>
-  <li><a href="#lemma-whitepaper" id="toc-lemma-whitepaper">Lemma
-  Whitepaper</a>
+  <li><a href="#zhanlang-whitepaper"
+  id="toc-zhanlang-whitepaper">zhanlang Whitepaper</a>
   <ul>
   <li><a href="#one-sentence" id="toc-one-sentence">One
   sentence</a></li>
@@ -36,8 +36,8 @@
   design principles</a></li>
   <li><a href="#core-invariant" id="toc-core-invariant">Core
   invariant</a></li>
-  <li><a href="#what-lemma-is-not" id="toc-what-lemma-is-not">What Lemma
-  is not</a></li>
+  <li><a href="#what-zhanlang-is-not" id="toc-what-zhanlang-is-not">What
+  zhanlang is not</a></li>
   <li><a href="#roadmap" id="toc-roadmap">Roadmap</a></li>
   <li><a href="#relation-to-prior-work"
   id="toc-relation-to-prior-work">Relation to prior work</a></li>
@@ -45,7 +45,7 @@
   </ul>
 </aside>
 <article class="doc-content">
-<h1 id="lemma-whitepaper">Lemma Whitepaper</h1>
+<h1 id="zhanlang-whitepaper">zhanlang Whitepaper</h1>
 <blockquote>
 <p>Version: v0.1</p>
 <p>Date: 2026-10-17</p>
@@ -55,7 +55,7 @@ syntax and semantics are in <a href="../spec.md">spec.md</a>.</p>
 <p>中文译文见 <a
 href="white-paper.zh-CN.md">white-paper.zh-CN.md</a>。</p>
 <h2 id="one-sentence">One sentence</h2>
-<p>Lemma is a programming language for vibe coding: AI writes the
+<p>zhanlang is a programming language for vibe coding: AI writes the
 implementation, humans and the compiler verify intent — and the intent
 itself is verified too.</p>
 <h2 id="the-problem-we-solve">The problem we solve</h2>
@@ -66,8 +66,8 @@ drifting from intent — cannot be caught during generation.</p>
 <p>Existing feedback channels (type systems, tests, runtime assertions,
 documentation) all run after generation and are maintained
 independently. Express the same intent four times and you get four
-copies that drift. Lemma answers one intuition: if intent is expressed
-exactly once, and that one expression serves as spec, test,
+copies that drift. zhanlang answers one intuition: if intent is
+expressed exactly once, and that one expression serves as spec, test,
 documentation, and assertion at the same time, does the drift
 disappear?</p>
 <h2 id="first-principles-and-design-principles">First principles and
@@ -105,11 +105,11 @@ as rigorously as the implementation.</li>
 spec expressions must be able to talk about state and side effects
 (<code>old</code> / <code>modifies</code> / <code>events</code>),
 otherwise real business intent cannot be carried.</p>
-<h2 id="what-lemma-is-not">What Lemma is not</h2>
+<h2 id="what-zhanlang-is-not">What zhanlang is not</h2>
 <p>Deliberately absent, to avoid a collage: class inheritance, implicit
 conversion, dynamic-by-default typing, implicit effects, macros,
 multiple dispatch. Each omission corresponds to a feature other
-languages already have but that has nothing to do with Lemma’s core
+languages already have but that has nothing to do with zhanlang’s core
 problem.</p>
 <h2 id="roadmap">Roadmap</h2>
 <table>
@@ -161,18 +161,18 @@ fall back to <code>checked</code></td>
 <p>Every milestone has matching conformance tests; any implementation
 (not just the official reference) is conformant once those pass.</p>
 <h2 id="relation-to-prior-work">Relation to prior work</h2>
-<p>Lemma does not invent a new proof theory. It recombines mature pieces
-— design by contract, effect systems, frame constraints,
+<p>zhanlang does not invent a new proof theory. It recombines mature
+pieces — design by contract, effect systems, frame constraints,
 example-implication checking — around the axis of “spec self-check”. The
 real novelty is the two-sided invariant: historically, tools either
-verify the implementation or assume the spec is correct; Lemma treats
+verify the implementation or assume the spec is correct; zhanlang treats
 “the spec itself may be written wrong by an AI” as a first-class
 problem.</p>
 </article>
 </div>
 <footer class="footer">
-  <a href="https://github.com/JunyuZhan/Lemma">GitHub repository</a>
-  <span>Synced from <a href="https://github.com/JunyuZhan/Lemma">origin/main</a></span>
+  <a href="https://github.com/JunyuZhan/zhanlang">GitHub repository</a>
+  <span>Synced from <a href="https://github.com/JunyuZhan/zhanlang">origin/main</a></span>
 </footer>
 </body>
 </html>

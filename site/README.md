@@ -1,4 +1,4 @@
-# Lemma site maintenance (gh-pages branch)
+# zhanlang site maintenance (gh-pages branch)
 
 Site content is synced **only from `origin/main`**; this branch never modifies core
 code (`src/`, `spec.md`, `docs/white-paper.md`, `examples/`, `conformance/`,

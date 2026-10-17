@@ -1,0 +1,27 @@
+// 并发 + IO：效果声明的组合
+module batch
+
+type UserId = Int
+
+type User = record {
+  id: UserId
+  email: String
+}
+
+enum FetchError {
+  InvalidArguments
+  TimeoutExceeded
+}
+
+fn fetch_users(ids: List<UserId>, concurrency: Int) -> Result<List<User>, FetchError>
+  io async
+  spec {
+    pre concurrency > 0
+    post result is Ok || result is Err
+    examples {
+      fetch_users([], 3) is Ok
+    }
+  }
+{
+  todo
+}

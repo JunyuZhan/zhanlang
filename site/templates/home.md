@@ -1,5 +1,5 @@
 ---
-title: Lemma
+title: zhanlang — AI writes, we verify intent
 ---
 
 <div class="hero">
@@ -34,7 +34,7 @@ title: Lemma
 <div class="section">
 <p class="eyebrow">Example</p>
 <h2>Intent, written into the code</h2>
-<pre><code class="language-lemma">@@EXAMPLE@@</code></pre>
+<pre><code class="language-zhanlang">@@EXAMPLE@@</code></pre>
 <p style="margin-top:16px"><a href="play/">Keep editing in the Playground →</a></p>
 </div>
 

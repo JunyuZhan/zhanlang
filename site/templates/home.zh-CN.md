@@ -1,5 +1,5 @@
 ---
-title: Lemma
+title: zhanlang（詹语言）— AI 写实现，共同验证意图
 ---
 
 <div class="hero">
@@ -34,7 +34,7 @@ title: Lemma
 <div class="section">
 <p class="eyebrow">示例</p>
 <h2>意图写进代码</h2>
-<pre><code class="language-lemma">@@EXAMPLE@@</code></pre>
+<pre><code class="language-zhanlang">@@EXAMPLE@@</code></pre>
 <p style="margin-top:16px"><a href="../play/">在 Playground 中继续编辑 →</a></p>
 </div>
 
