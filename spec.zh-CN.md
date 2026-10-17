@@ -1,4 +1,4 @@
-# Lemma 语言规格书
+# zhanlang（詹语言）语言规格书
 
 > 版本：v0.1
 >
@@ -166,7 +166,7 @@ pattern := "_" | literal | ident ("(" pattern ("," pattern)* ")")?
 
 任何对 `T?` 的直接字段访问或运算都是类型错误。唯一解包途径是 `match`：
 
-```lemma
+```zhanlang
 match u.age {
   Some(a) => a >= 18
   None => false
@@ -248,7 +248,7 @@ v0.1 只保证以下内置，其余按未指定。一阶函数与 `map` / `filte
 
 可运行的示例见仓库 [examples/](examples/)。核心两个：
 
-```lemma
+```zhanlang
 fn max(a: Int, b: Int) -> Int
   spec {
     post result >= a
@@ -264,7 +264,7 @@ fn max(a: Int, b: Int) -> Int
 }
 ```
 
-```lemma
+```zhanlang
 fn register(email: String, password: String) -> Result<UserId, RegError>
   io
   spec {

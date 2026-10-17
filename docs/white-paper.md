@@ -1,4 +1,4 @@
-# Lemma Whitepaper
+# zhanlang Whitepaper
 
 > Version: v0.1
 >
@@ -10,13 +10,13 @@
 
 ## One sentence
 
-Lemma is a programming language for vibe coding: AI writes the implementation, humans and the compiler verify intent — and the intent itself is verified too.
+zhanlang is a programming language for vibe coding: AI writes the implementation, humans and the compiler verify intent — and the intent itself is verified too.
 
 ## The problem we solve
 
 Vibe coding turns the human from "writer" into "intent provider and reviewer". That shift exposes a structural gap: the typical failure modes of AI-generated code — hallucinated APIs, off-by-one boundaries, drifting from intent — cannot be caught during generation.
 
-Existing feedback channels (type systems, tests, runtime assertions, documentation) all run after generation and are maintained independently. Express the same intent four times and you get four copies that drift. Lemma answers one intuition: if intent is expressed exactly once, and that one expression serves as spec, test, documentation, and assertion at the same time, does the drift disappear?
+Existing feedback channels (type systems, tests, runtime assertions, documentation) all run after generation and are maintained independently. Express the same intent four times and you get four copies that drift. zhanlang answers one intuition: if intent is expressed exactly once, and that one expression serves as spec, test, documentation, and assertion at the same time, does the drift disappear?
 
 ## First principles and design principles
 
@@ -38,9 +38,9 @@ The two halves of the invariant matter equally:
 
 Lessons from the early paper prototype are folded into the design: spec expressions must be able to talk about state and side effects (`old` / `modifies` / `events`), otherwise real business intent cannot be carried.
 
-## What Lemma is not
+## What zhanlang is not
 
-Deliberately absent, to avoid a collage: class inheritance, implicit conversion, dynamic-by-default typing, implicit effects, macros, multiple dispatch. Each omission corresponds to a feature other languages already have but that has nothing to do with Lemma's core problem.
+Deliberately absent, to avoid a collage: class inheritance, implicit conversion, dynamic-by-default typing, implicit effects, macros, multiple dispatch. Each omission corresponds to a feature other languages already have but that has nothing to do with zhanlang's core problem.
 
 ## Roadmap
 
@@ -56,4 +56,4 @@ Every milestone has matching conformance tests; any implementation (not just the
 
 ## Relation to prior work
 
-Lemma does not invent a new proof theory. It recombines mature pieces — design by contract, effect systems, frame constraints, example-implication checking — around the axis of "spec self-check". The real novelty is the two-sided invariant: historically, tools either verify the implementation or assume the spec is correct; Lemma treats "the spec itself may be written wrong by an AI" as a first-class problem.
+zhanlang does not invent a new proof theory. It recombines mature pieces — design by contract, effect systems, frame constraints, example-implication checking — around the axis of "spec self-check". The real novelty is the two-sided invariant: historically, tools either verify the implementation or assume the spec is correct; zhanlang treats "the spec itself may be written wrong by an AI" as a first-class problem.

@@ -1,12 +1,12 @@
 [package]
-name = "lemma"
+name = "zhanlang"
 version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "lemma"
+name = "zl"
 path = "src/main.rs"
 
 [lib]
-name = "lemma"
+name = "zhanlang"
 path = "src/lib.rs"

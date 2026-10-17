@@ -1,10 +1,10 @@
-# Lemma Language Specification
+# zhanlang Language Specification
 
 > Version: v0.1
 >
 > Date: 2026-10-17
 >
-> This document is the normative definition of Lemma. Where an implementation conflicts with this document, this document wins; anything left undefined here is "unspecified" and an implementation may choose freely, but must document its choice.
+> This document is the normative definition of zhanlang. Where an implementation conflicts with this document, this document wins; anything left undefined here is "unspecified" and an implementation may choose freely, but must document its choice.
 
 中文译文见 [spec.zh-CN.md](spec.zh-CN.md)（非规范，以本英文版为准）。
 
@@ -168,7 +168,7 @@ Patterns appear in `match` arms and in `is` assertions. `ident(p1, ...)` is a co
 
 Any direct field access or operation on `T?` is a type error. The only way to unwrap is `match`:
 
-```lemma
+```zhanlang
 match u.age {
   Some(a) => a >= 18
   None => false
@@ -250,7 +250,7 @@ v0.1 guarantees only the following built-ins; everything else is unspecified. Fi
 
 Runnable examples live in [examples/](examples/). Two core ones:
 
-```lemma
+```zhanlang
 fn max(a: Int, b: Int) -> Int
   spec {
     post result >= a
@@ -266,7 +266,7 @@ fn max(a: Int, b: Int) -> Int
 }
 ```
 
-```lemma
+```zhanlang
 fn register(email: String, password: String) -> Result<UserId, RegError>
   io
   spec {

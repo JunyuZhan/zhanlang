@@ -5,7 +5,7 @@ mod parser;
 mod typecheck;
 mod verify;
 
-/// 稳定入口：解析并检查一段 Lemma 源码。
+/// 稳定入口：解析并检查一段 zhanlang 源码。
 ///
 /// 这是库对外的唯一稳定 API。命令行二进制、WebAssembly playground
 /// 以及未来的 LSP 都通过它调用，不接触内部结构。
@@ -84,9 +84,9 @@ mod wasm {
         ptr
     }
 
-    /// 检查 Lemma 源码；返回 NUL 结尾的 UTF-8 结果，须用 `lemma_free` 释放。
+    /// 检查 zhanlang 源码；返回 NUL 结尾的 UTF-8 结果，须用 `zl_free` 释放。
     #[no_mangle]
-    pub extern "C" fn lemma_check(ptr: *const u8, len: usize) -> *mut u8 {
+    pub extern "C" fn zl_check(ptr: *const u8, len: usize) -> *mut u8 {
         let src = if ptr.is_null() {
             String::new()
         } else {
@@ -100,7 +100,7 @@ mod wasm {
     }
 
     #[no_mangle]
-    pub extern "C" fn lemma_free(ptr: *mut u8, len: usize) {
+    pub extern "C" fn zl_free(ptr: *mut u8, len: usize) {
         if !ptr.is_null() && len > 0 {
             unsafe {
                 let slice = std::slice::from_raw_parts_mut(ptr, len);

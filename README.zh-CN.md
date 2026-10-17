@@ -1,4 +1,4 @@
-# Lemma
+# zhanlang（詹语言）
 
 一门面向 vibe coding 的编程语言：AI 写实现，人和编译器共同验证意图，且意图本身也是被验证的对象。
 
@@ -33,9 +33,9 @@ M1 解析与类型检查 → M2 spec 自检器 → M3 运行时断言 → M4 最
 
 ```
 cargo build
-./target/debug/lemma examples/01-basics.lemma
-./target/debug/lemma run examples/01-basics.lemma
-./target/debug/lemma verify examples/01-basics.lemma
+./target/debug/zl examples/01-basics.zl
+./target/debug/zl run examples/01-basics.zl
+./target/debug/zl verify examples/01-basics.zl
 ```
 
 已实现：词法、语法、类型检查、效果检查、空安全、spec 自检（非空洞、引用合法性、可见性与 `trusted` 规则）、M2 样例一致性与可达性、M3 解释器与运行时 `pre` / `post` 断言、M4 最小静态验证（`max` 可静态证明，非线性/递归函数回退 `checked`）、M5 状态词汇（`old` / `events` / `modifies` 的放置规则与运行时语义）。

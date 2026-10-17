@@ -1,4 +1,4 @@
-# Lemma
+# zhanlang
 
 A programming language for vibe coding: AI writes the implementation, humans and the compiler verify intent — and the intent itself is verified too.
 
@@ -33,9 +33,9 @@ Requires the Rust toolchain.
 
 ```
 cargo build
-./target/debug/lemma examples/01-basics.lemma
-./target/debug/lemma run examples/01-basics.lemma
-./target/debug/lemma verify examples/01-basics.lemma
+./target/debug/zl examples/01-basics.zl
+./target/debug/zl run examples/01-basics.zl
+./target/debug/zl verify examples/01-basics.zl
 ```
 
 Implemented: lexing, parsing, type checking, effect checking, null safety, spec self-checking (non-vacuity, reference legality, visibility & `trusted` rules), M2 example consistency & reachability, M3 interpreter with runtime `pre`/`post` assertions, M4 minimal static verification (`max` is statically proved; nonlinear/recursive functions fall back to `checked`), M5 state vocabulary (`old` / `events` / `modifies` placement rules and runtime semantics).

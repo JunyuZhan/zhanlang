@@ -4,7 +4,7 @@ use std::process;
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        eprintln!("用法: lemma [run] <文件.lemma>");
+        eprintln!("用法: zl [run|verify] <文件.zl>");
         process::exit(2);
     }
     let mode = match args[1].as_str() {
@@ -22,7 +22,7 @@ fn main() {
     };
     match mode {
         "check" => {
-            let out = lemma::check(&src);
+            let out = zhanlang::check(&src);
             if out == "OK" {
                 println!("OK: {} 通过解析与类型检查", path);
             } else {
@@ -33,7 +33,7 @@ fn main() {
             }
         }
         "run" => {
-            let out = lemma::run(&src);
+            let out = zhanlang::run(&src);
             if out.starts_with("运行错误") || out.starts_with("类型检查未通过") {
                 eprintln!("{}", out);
                 process::exit(1);
@@ -42,7 +42,7 @@ fn main() {
             }
         }
         _ => {
-            println!("{}", lemma::verify(&src));
+            println!("{}", zhanlang::verify(&src));
         }
     }
 }
