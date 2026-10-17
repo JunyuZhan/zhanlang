@@ -7,6 +7,7 @@
 <meta name="description" content="zhanlang（詹语言）是面向 vibe coding
 的编程语言：每个可见函数必须携带 spec，编译器同时验证实现与 spec
 本身。">
+<script src="../assets/theme.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
 <link rel="stylesheet" href="../assets/theme.css">
@@ -21,16 +22,22 @@
     <a href="https://github.com/JunyuZhan/zhanlang">GitHub</a>
   </div>
   <div class="spacer"></div>
+  <button class="theme-toggle" data-theme-toggle onclick="__zhanlangToggleTheme()" aria-label="切换主题">🌙</button>
   <a href="../">English</a>
 </nav>
 <main>
 <div class="hero">
+<div class="hero-grid">
+<div class="hero-text">
 <p class="eyebrow">
-面向 vibe coding 的编程语言
+编程语言
 </p>
 <h1>
 AI 写实现，人和编译器共同验证意图。
 </h1>
+<p class="tagline">
+专为 vibe coding 设计的 AI 协同编程语言。
+</p>
 <p class="sub">
 每个对外可见的函数必须携带 <code>spec</code>。<code>spec</code>
 是唯一真相源——意图本身也是被验证的对象。
@@ -38,6 +45,16 @@ AI 写实现，人和编译器共同验证意图。
 <div class="cta">
 <p><a class="btn btn-primary" href="../play/">打开 Playground</a>
 <a class="btn btn-ghost" href="../spec/">阅读规格书</a></p>
+</div>
+</div>
+<div class="hero-code">
+<pre><code class="language-zhanlang">fn max(a: Int, b: Int) -&gt; Int
+  spec {
+    post result &gt;= a &amp;&amp; result &gt;= b
+    examples { max(1, 2) == 2 }
+  }
+{ if a &gt;= b { a } else { b } }</code></pre>
+</div>
 </div>
 </div>
 <section>
@@ -117,7 +134,7 @@ M5 状态词汇
 </main>
 <footer class="footer">
   <a href="https://github.com/JunyuZhan/zhanlang">GitHub repository</a>
-  <span class="commit">Baseline origin/main @ c2f44ad</span>
+  <span class="commit">Baseline origin/main @ 8bf92d5</span>
 </footer>
 </body>
 </html>
