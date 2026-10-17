@@ -14,8 +14,8 @@ English version: [README.md](README.md)。
 
 ## 目录
 
-- [spec.md](spec.md) — 语言规格书（语法与语义的规范定义）
-- [docs/white-paper.md](docs/white-paper.md) — 白皮书（设计动机与第一性原理）
+- [spec.zh-CN.md](spec.zh-CN.md) — 语言规格书译文（规范以英文 [spec.md](spec.md) 为准）
+- [docs/white-paper.zh-CN.md](docs/white-paper.zh-CN.md) — 白皮书译文（规范以英文 [docs/white-paper.md](docs/white-paper.md) 为准）
 - [examples/](examples/) — 示例程序
 - [conformance/](conformance/) — 实现验收用例
 

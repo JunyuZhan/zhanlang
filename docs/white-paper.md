@@ -1,57 +1,59 @@
-# Lemma 白皮书
+# Lemma Whitepaper
 
-> 版本：v0.1
+> Version: v0.1
 >
-> 日期：2026-10-17
+> Date: 2026-10-17
 >
-> 本文讲「为什么做这门语言」。完整语法与语义定义见 [spec.md](../spec.md)。
+> This document explains *why* the language exists. The full syntax and semantics are in [spec.md](../spec.md).
 
-## 一句话
+中文译文见 [white-paper.zh-CN.md](white-paper.zh-CN.md)。
 
-Lemma 是一门面向 vibe coding 的编程语言：AI 写实现，人和编译器共同验证意图——而且意图本身也是被验证的对象。
+## One sentence
 
-## 我们解决什么问题
+Lemma is a programming language for vibe coding: AI writes the implementation, humans and the compiler verify intent — and the intent itself is verified too.
 
-vibe coding 把人的角色从「编写者」变成「意图提供者与审阅者」。这个转变暴露了一个结构性缺口：AI 生成代码的典型失败模式——幻觉 API、边界错误、与意图漂移——无法在生成过程中被有效拦截。
+## The problem we solve
 
-现有语言的反馈通道（类型系统、测试、运行时断言、文档）全部发生在代码生成之后，且彼此独立维护。一份意图被重复表达四次，就会产生四份漂移。Lemma 回答一个直觉：如果意图只被表达一次，且这份表达同时是规格、测试、文档与断言，漂移是否就从物理上被消灭了？
+Vibe coding turns the human from "writer" into "intent provider and reviewer". That shift exposes a structural gap: the typical failure modes of AI-generated code — hallucinated APIs, off-by-one boundaries, drifting from intent — cannot be caught during generation.
 
-## 第一性原理与设计原则
+Existing feedback channels (type systems, tests, runtime assertions, documentation) all run after generation and are maintained independently. Express the same intent four times and you get four copies that drift. Lemma answers one intuition: if intent is expressed exactly once, and that one expression serves as spec, test, documentation, and assertion at the same time, does the drift disappear?
 
-本语言只服从四条要求，不服从任何「特性拼盘」：
+## First principles and design principles
 
-1. 解决真实问题，不是拼盘。不为「综合各家之长」而堆特性，只解决四份产物漂移这一个问题。
-2. AI 与 vibe coding 优先。把「AI 是主要代码作者、人类提供意图并审阅」当作默认前提。
-3. 第一性原理。先定义不可违反的不变量，再推导语法与工具链；语法和类型都为不变量服务。
-4. 可被他人与 AI 实现。定义是结构化的、可执行验收的，不是散文。
+The language obeys four requirements and nothing resembling a "feature collage":
 
-## 核心不变量
+1. Solve a real problem, don't collage. No piling features on "to borrow the best of everything"; only one problem — the drift between four artifacts.
+2. AI and vibe coding first. "AI is the primary author, humans provide and review intent" is the default premise.
+3. First principles. Define an inviolable invariant first, then derive syntax and tooling; syntax and types serve the invariant.
+4. Implementable by others and by AI. The definition is structured and executable-acceptable, not prose.
 
-> 每个对外可见的函数必须携带 `spec`；`spec` 是唯一真相源；编译器在构造期同时做两件验证——验证实现满足 spec，验证 spec 本身不是空洞、矛盾或不可达的。
+## Core invariant
 
-这条不变量的两个半边同样重要：
+> Every publicly visible function must carry a `spec`; the `spec` is the single source of truth; at construction time the compiler does two checks — that the implementation satisfies the spec, and that the spec itself is not vacuous, contradictory, or unreachable.
 
-- 左半边（实现 ⊨ spec）：让规格、测试、文档、断言共享一份表达。
-- 右半边（spec 自检）：因为 vibe coding 里 AI 写的 spec 同样会空洞、自相矛盾，编译器必须像审查实现一样审查 spec。
+The two halves of the invariant matter equally:
 
-早期纸面实验的教训已并入设计：spec 表达式必须能谈论状态与副作用（`old` / `modifies` / `events`），否则真实业务意图无法承载。
+- Left half (implementation ⊨ spec): spec, tests, docs, and assertions share one expression.
+- Right half (spec self-check): because AI-written specs are themselves vacuous or contradictory, the compiler must review the spec as rigorously as the implementation.
 
-## 不是什么
+Lessons from the early paper prototype are folded into the design: spec expressions must be able to talk about state and side effects (`old` / `modifies` / `events`), otherwise real business intent cannot be carried.
 
-刻意不做的，以避免拼盘：类继承、隐式类型转换、默认动态类型、隐式效果、宏、多分派。每一样被砍掉，都对应一个「别的语言已经有、但与本语言的核心问题无关」的特性。
+## What Lemma is not
 
-## 路线图
+Deliberately absent, to avoid a collage: class inheritance, implicit conversion, dynamic-by-default typing, implicit effects, macros, multiple dispatch. Each omission corresponds to a feature other languages already have but that has nothing to do with Lemma's core problem.
 
-| 里程碑 | 内容 | 验收标准 |
+## Roadmap
+
+| Milestone | Scope | Acceptance |
 |---|---|---|
-| M1 解析与类型检查 | 文法与类型/效果检查 | 示例程序全部通过 |
-| M2 spec 自检器 | 非空洞、可达性、样例一致性、引用合法性 | 构造的空洞/矛盾/不可达 spec 均被拒绝 |
-| M3 运行时断言 | `checked` 层级插入断言 | 违反 spec 的实现在运行期被捕获 |
-| M4 静态验证器 | `verified` 层级的最小符号执行（线性/结构化子集 + if 分支展开） | `max` 被静态证明；非线性/递归函数回退 `checked` |
-| M5 状态词汇 | `old` / `modifies` / `events` 的放置规则与运行时语义 | 示例 03、06 可写且可被检查 |
+| M1 Parsing & type checking | grammar plus type/effect checking | all example programs pass |
+| M2 `spec` self-checker | non-vacuity, reachability, example consistency, reference legality | constructed vacuous/contradictory/unreachable specs are rejected |
+| M3 Runtime assertions | `checked` tier inserts assertions | spec violations are caught at runtime |
+| M4 Static verifier | minimal symbolic execution of the `verified` tier (linear/structural subset + if-branch expansion) | `max` is statically proved; nonlinear/recursive functions fall back to `checked` |
+| M5 State vocabulary | placement rules and runtime semantics for `old` / `modifies` / `events` | examples 03 and 06 can be written and checked |
 
-每个里程碑都有对应的 conformance 测试，任何实现（不限于官方参考实现）跑通即合格。
+Every milestone has matching conformance tests; any implementation (not just the official reference) is conformant once those pass.
 
-## 与既有工作的关系
+## Relation to prior work
 
-Lemma 不试图发明新的证明理论，而是把成熟构件（契约式设计、效果系统、框架约束、样例蕴含检查）以「spec 自检」为轴重新组合。真正的创新点是那条双半边不变量：历史上工具要么验证实现、要么假设 spec 正确，Lemma 把「spec 本身会被 AI 写错」当作一等问题来对待。
+Lemma does not invent a new proof theory. It recombines mature pieces — design by contract, effect systems, frame constraints, example-implication checking — around the axis of "spec self-check". The real novelty is the two-sided invariant: historically, tools either verify the implementation or assume the spec is correct; Lemma treats "the spec itself may be written wrong by an AI" as a first-class problem.

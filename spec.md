@@ -1,54 +1,56 @@
-# Lemma 语言规格书
+# Lemma Language Specification
 
-> 版本：v0.1
+> Version: v0.1
 >
-> 日期：2026-10-17
+> Date: 2026-10-17
 >
-> 本文是 Lemma 的规范性定义。实现与本文冲突时以本文为准；本文未定义之处即「未指定」，实现可自行决定但必须在文档中记录。
+> This document is the normative definition of Lemma. Where an implementation conflicts with this document, this document wins; anything left undefined here is "unspecified" and an implementation may choose freely, but must document its choice.
 
-## 目录
+中文译文见 [spec.zh-CN.md](spec.zh-CN.md)（非规范，以本英文版为准）。
 
-1. 词法
-2. 语法
-3. 类型系统
-4. 意图块 spec
-5. 效果系统
-6. 验证层级
-7. 标准库（最小）
-8. 示例
-9. 验收（conformance）
+## Table of contents
 
-## 1. 词法
+1. Lexical structure
+2. Syntax
+3. Type system
+4. Intent blocks (`spec`)
+5. Effect system
+6. Verification tiers
+7. Standard library (minimal)
+8. Examples
+9. Conformance
 
-### 1.1 注释
+## 1. Lexical structure
 
-- `//` 到行尾为行注释。
-- `/*` 到最近的 `*/` 为块注释，不嵌套。
+### 1.1 Comments
 
-### 1.2 标识符与关键字
+- `//` to end of line is a line comment.
+- `/*` to the nearest `*/` is a block comment; it does not nest.
 
-- 标识符：`[A-Za-z_][A-Za-z0-9_]*`。
-- 关键字（保留，不能作标识符）：
+### 1.2 Identifiers and keywords
+
+- Identifier: `[A-Za-z_][A-Za-z0-9_]*`.
+- Keywords (reserved; cannot be used as identifiers):
 
   `module type record enum fn spec pre post examples if else match is old modifies events let return todo true false private Int Float Bool String`
 
-- 大小写敏感。按惯例，类型与构造子以大写开头，变量与函数以小写开头，但语法不强制。
+- Case-sensitive. By convention types and constructors start with an uppercase letter and variables and functions with a lowercase letter, but the grammar does not enforce this.
 
-### 1.3 字面量
+### 1.3 Literals
 
-- 整数：`[0-9]+`，类型 `Int`（v0.1 实现用 64 位有符号整数，溢出行为由实现记录）。
-- 浮点：`[0-9]+ "." [0-9]+`，类型 `Float`。
-- 字符串：`"..."`，转义序列仅 `\"`、`\\`、`\n`、`\t`，类型 `String`。
-- 布尔：`true`、`false`。
+- Integer: `[0-9]+`, type `Int` (v0.1 uses 64-bit signed integers; overflow behavior is implementation-documented).
+- Float: `[0-9]+ "." [0-9]+`, type `Float`.
+- String: `"..."`; the only escapes are `\"`, `\\`, `\n`, `\t`; type `String`.
+- Boolean: `true`, `false`.
 
-### 1.4 运算符与分隔符
+### 1.4 Operators and delimiters
 
-- 运算符：`+ - * / % == != < <= > >= && || !`
-- 分隔符：`( ) { } [ ] < > , . : -> => ? _`
+- Operators: `+ - * / % == != < <= > >= && || !`
+- Delimiters: `( ) { } [ ] < > , . : -> => ? _`
 
-## 2. 语法
+## 2. Syntax
 
-### 2.1 程序结构
+### 2.1 Program structure
 
 ```text
 program     := module_decl? decl*
@@ -56,9 +58,9 @@ module_decl := "module" ident
 decl        := type_decl | enum_decl | fn_decl
 ```
 
-一个文件即一个模块；`module` 可省略，省略时模块名为文件名。
+A file is a module; `module` may be omitted, in which case the module name is the file name.
 
-### 2.2 类型声明
+### 2.2 Type declarations
 
 ```text
 type_decl := "type" ident "=" type
@@ -66,7 +68,7 @@ enum_decl := "enum" ident "{" variant ("," variant)* "}"
 variant   := ident ("(" ident ":" type ("," ident ":" type)* ")")?
 ```
 
-### 2.3 函数声明
+### 2.3 Function declarations
 
 ```text
 fn_decl    := "private"? "fn" ident type_params? "(" params? ")" ("->" type)? effects? body_part? block
@@ -79,9 +81,9 @@ body_part  := spec_block | trusted_note
 trusted_note := "trusted" "(" string ")"
 ```
 
-可见性与 spec 的关系见 §4.4。
+Visibility and its relation to `spec` are described in §4.4.
 
-### 2.4 spec 块
+### 2.4 `spec` blocks
 
 ```text
 spec_block := "spec" "{" spec_item* "}"
@@ -91,7 +93,7 @@ spec_item  := "pre" expr | "post" expr
 example    := expr ("==" expr | "is" pattern)
 ```
 
-### 2.5 语句与块
+### 2.5 Statements and blocks
 
 ```text
 block := "{" stmt* expr? "}"
@@ -100,9 +102,9 @@ stmt  := "let" ident (":" type)? "=" expr ";"
        | expr ";"
 ```
 
-块的值为其末尾表达式；无末尾表达式时块值为 `()`（单元，v0.1 不把单元当普通类型使用，只允许出现在 `return;` 语义中）。
+The value of a block is its trailing expression; without one, the block yields `()` (unit). v0.1 does not treat unit as an ordinary type; it exists only for `return;`.
 
-### 2.6 类型
+### 2.6 Types
 
 ```text
 type     := "Int" | "Float" | "Bool" | "String"
@@ -111,9 +113,9 @@ type     := "Int" | "Float" | "Bool" | "String"
 type_args:= "<" type ("," type)* ">"
 ```
 
-`T?` 是 `Option<T>` 的语法糖。
+`T?` is sugar for `Option<T>`.
 
-### 2.7 表达式
+### 2.7 Expressions
 
 ```text
 expr       := if_expr | match_expr | or
@@ -132,39 +134,39 @@ primary    := literal | ident | "(" expr ")" | "todo"
 field      := ident ":" expr
 ```
 
-优先级从低到高：`||` → `&&` → 比较 → 加减 → 乘除余 → 一元 `! -` → 后缀（调用/字段/索引）→ 主表达式。
+Precedence, low to high: `||` → `&&` → comparison → addition/subtraction → multiplication/division/remainder → unary `! -` → postfix (call/field/index) → primary.
 
-`ident "(" ... ")"` 同时用于普通函数调用与构造子（`Ok(x)`、`Some(x)`、枚举变体）。
+`ident "(" ... ")"` covers ordinary function calls as well as constructors (`Ok(x)`, `Some(x)`, enum variants).
 
-### 2.8 模式
+### 2.8 Patterns
 
 ```text
 pattern := "_" | literal | ident ("(" pattern ("," pattern)* ")")?
 ```
 
-模式出现在 `match` 分支与 `is` 断言中；`ident(p1, ...)` 是构造子模式，`ident` 单独出现是通配绑定。
+Patterns appear in `match` arms and in `is` assertions. `ident(p1, ...)` is a constructor pattern; a bare `ident` is a wildcard binding.
 
-## 3. 类型系统
+## 3. Type system
 
-### 3.1 类型分类
+### 3.1 Classification
 
-- 基础类型：`Int`、`Float`、`Bool`、`String`。
-- 可选：`T?`。
-- 参数化类型：`List<T>`、`Map<K, V>`、`Result<T, E>`。
-- 记录：`record`。
-- 枚举：`enum`。
-- 类型别名：`type X = T`。
+- Primitive types: `Int`, `Float`, `Bool`, `String`.
+- Optional: `T?`.
+- Parameterized types: `List<T>`, `Map<K, V>`, `Result<T, E>`.
+- Records: `record`.
+- Enums: `enum`.
+- Type aliases: `type X = T`.
 
-### 3.2 规则
+### 3.2 Rules
 
-- 静态、强类型，无隐式转换。`Int` 与 `Float` 之间必须显式转换：`Int` 提供 `to_float() -> Float`，`Float` 提供 `to_int() -> Int`（向零截断）。浮点表示带来的往返精度损失由实现记录，不保证精确。
-- 泛型不变（invariant），无上界。
-- `T?` 必须先解包再当作 `T` 使用；解包方式是 `match` 或 `is` 断言绑定。
-- `Result<T, E>` 的合法构造子是 `Ok(T)` 与 `Err(E)`。
+- Static and strongly typed, no implicit conversion. `Int` and `Float` must be converted explicitly: `Int` has `to_float() -> Float` and `Float` has `to_int() -> Int` (truncating toward zero). Round-trip precision loss from floating-point representation is implementation-documented and not guaranteed.
+- Generics are invariant, with no bounds.
+- A `T?` must be unwrapped before it is used as `T`; the only ways to unwrap are `match` and `is`-assertion binding.
+- The legal constructors of `Result<T, E>` are `Ok(T)` and `Err(E)`.
 
-### 3.3 空安全
+### 3.3 Null safety
 
-任何对 `T?` 的直接字段访问或运算都是类型错误。唯一解包途径是 `match`：
+Any direct field access or operation on `T?` is a type error. The only way to unwrap is `match`:
 
 ```lemma
 match u.age {
@@ -173,80 +175,80 @@ match u.age {
 }
 ```
 
-## 4. 意图块 spec
+## 4. Intent blocks (`spec`)
 
-### 4.1 构件
+### 4.1 Components
 
-- `pre expr`：进入函数前必须成立的条件。
-- `post expr`：返回前必须成立的条件，用 `result` 指代返回值。
-- `examples`：输入输出样例，每条形如 `expr == expr` 或 `expr is pattern`。
-- `modifies x, ...`：声明本函数可写的外部状态（框架约束）。
+- `pre expr`: a condition that must hold on entry.
+- `post expr`: a condition that must hold on return; `result` names the return value.
+- `examples`: input/output examples, each of the form `expr == expr` or `expr is pattern`.
+- `modifies x, ...`: declares the external state this function may write (frame constraint).
 
-### 4.2 表达式域
+### 4.2 Expression domain
 
-spec 表达式默认纯。允许以下特殊形式：
+`spec` expressions are pure by default. The following special forms are allowed:
 
-- `old(expr)`：取 `expr` 在函数入口处的值；只出现在 `post` 中。
-- `events`：编译器维护的 ghost 事件历史，只出现在 `post` 中。
-- `is`：模式匹配断言，如 `result is Ok`、`result is Err(e)`、`u.age is Some(a)`。
+- `old(expr)`: the value of `expr` at function entry; allowed only in `post`.
+- `events`: a compiler-maintained ghost event history; allowed only in `post`.
+- `is`: a pattern-match assertion, e.g. `result is Ok`, `result is Err(e)`, `u.age is Some(a)`.
 
-`body` 中不允许出现 `old`、`events`、`is`；`spec` 中不允许出现 `io` 等有副作用调用。
+`old`, `events`, and `is` are not allowed in a function body; side-effecting calls such as `io` are not allowed in `spec`.
 
-### 4.3 spec 自检（构造期，强制）
+### 4.3 `spec` self-check (at construction time, mandatory)
 
-编译器对每个 spec 执行以下检查，任一失败即拒绝编译：
+The compiler performs the following checks on every `spec`; any failure rejects compilation:
 
-1. **非空洞。** `post` 不得是恒真式。至少拒绝 `post true` 与 `post x == x`；更一般的恒真检测为「尽力而为」，未检出不作为错误。
-2. **可达性。** 对 `match result { ... }` 形式的 `post`，每个变体在 `pre` 成立时须可达；与 `pre` 明显矛盾的分支（如 `pre price > 0` 时出现 `Err(InvalidPrice) => price <= 0`）报错。完全可达性不可判定，v0.1 只做明显矛盾检测。
-3. **样例一致性。** 每条 example 的输入须满足 `pre`；期望输出不得与 `post` 矛盾。纯子集内可静态判定；其余在 `checked` 层运行时判定。
-4. **引用合法性。** spec 中出现的标识符必须是：参数、`result`、内置纯函数，或已声明且带 spec 的纯函数；未定义即报错。
+1. **Non-vacuity.** A `post` must not be a tautology. At minimum `post true` and `post x == x` are rejected; more general tautology detection is best-effort and a miss is not an error.
+2. **Reachability.** For a `post` of the form `match result { ... }`, every variant must be reachable when `pre` holds; a branch that obviously contradicts `pre` (e.g. `Err(InvalidPrice) => price <= 0` while `pre price > 0`) is rejected. Full reachability is undecidable; v0.1 detects only obvious contradictions.
+3. **Example consistency.** Each example's inputs must satisfy `pre`, and its expected output must not contradict `post`. This is decided statically within the pure subset and at runtime in the `checked` tier otherwise.
+4. **Reference legality.** Every identifier in `spec` must be a parameter, `result`, a built-in pure function, or a declared pure function that carries its own `spec`; undefined identifiers are rejected.
 
-### 4.4 可见性与省略 spec
+### 4.4 Visibility and omitting `spec`
 
-- 顶层函数默认公开（对外可见）。
-- 公开函数必须带 `spec`。
-- `private` 函数可带 `spec`，也可以省略；省略时必须标注 `trusted("原因")`。
-- `trusted` 只允许出现在 `private` 函数上。
+- Top-level functions are public (externally visible) by default.
+- Public functions must carry a `spec`.
+- `private` functions may carry a `spec` or omit it; omission requires a `trusted("reason")` annotation.
+- `trusted` is allowed only on `private` functions.
 
-## 5. 效果系统
+## 5. Effect system
 
-函数默认纯。需要外部能力的函数声明效果：
+Functions are pure by default. Functions that need external capabilities declare effects:
 
-- `io`：读写外部状态。
-- `async`：挂起与并发。
-- `random`：非确定性。
-- `time`：依赖时钟。
+- `io`: reads or writes external state.
+- `async`: suspension and concurrency.
+- `random`: non-determinism.
+- `time`: dependence on the clock.
 
-效果沿调用图向上传播：纯函数调用声明了 `io` 的函数是类型错误。效果是函数类型的一部分。
+Effects propagate up the call graph: a pure function calling a function that declares `io` is a type error. Effects are part of a function's type.
 
-## 6. 验证层级
+## 6. Verification tiers
 
-构造期验证按强度三级，降级必须显式：
+Construction-time verification has three tiers; downgrading must be explicit:
 
-| 层级 | 含义 | 规则 |
+| Tier | Meaning | Rule |
 |---|---|---|
-| `verified` | 编译器静态证明 spec | 默认目标 |
-| `checked` | 静态证不了，插入运行时断言 | 默认兜底 |
-| `trusted` | 显式豁免 | 写作 `trusted("原因")`；只允许出现在 `private` 且无 spec 的函数上，外部模块调用即错误 |
+| `verified` | the compiler statically proves the `spec` | default target |
+| `checked` | not statically provable; runtime assertions are inserted | default fallback |
+| `trusted` | explicit exemption | written `trusted("reason")`; allowed only on `private` functions without a `spec`; calling it from another module is an error |
 
-降级顺序固定为「先试 verified，失败落 checked」，不允许无声降级。任何一层都不会改变 spec 的语义，只改变验证发生的时间。
+The downgrade order is fixed: try `verified`, fall back to `checked`. Silent downgrade is not allowed. No tier changes the meaning of the `spec`, only when verification happens.
 
-## 7. 标准库（最小）
+## 7. Standard library (minimal)
 
-v0.1 只保证以下内置，其余按未指定。一阶函数与 `map` / `filter` 等高阶操作 v0.1 不保证。
+v0.1 guarantees only the following built-ins; everything else is unspecified. First-class functions and higher-order operations such as `map` / `filter` are not guaranteed in v0.1.
 
-- `Int`：`to_float() -> Float`。
-- `Float`：`to_int() -> Int`（向零截断）。
-- `String`：`len -> Int`、`contains(String) -> Bool`、`starts_with(String) -> Bool`、`ends_with(String) -> Bool`。
-- `List<T>`：`len -> Int`、`is_empty() -> Bool`、`get(Int) -> T?`。
-- `Map<K,V>`：`len -> Int`、`has(K) -> Bool`、`get(K) -> V?`。
-- `Option<T>`：构造子 `Some` / `None`。
-- `Result<T,E>`：构造子 `Ok` / `Err`。
-- `events`：ghost 序列，`len -> Int`、`contains(Event) -> Bool`。
+- `Int`: `to_float() -> Float`.
+- `Float`: `to_int() -> Int` (truncating toward zero).
+- `String`: `len -> Int`, `contains(String) -> Bool`, `starts_with(String) -> Bool`, `ends_with(String) -> Bool`.
+- `List<T>`: `len -> Int`, `is_empty() -> Bool`, `get(Int) -> T?`.
+- `Map<K,V>`: `len -> Int`, `has(K) -> Bool`, `get(K) -> V?`.
+- `Option<T>`: constructors `Some` / `None`.
+- `Result<T,E>`: constructors `Ok` / `Err`.
+- `events`: a ghost sequence, `len -> Int`, `contains(Event) -> Bool`.
 
-## 8. 示例
+## 8. Examples
 
-可运行的示例见仓库 [examples/](examples/)。核心两个：
+Runnable examples live in [examples/](examples/). Two core ones:
 
 ```lemma
 fn max(a: Int, b: Int) -> Int
@@ -281,13 +283,13 @@ fn register(email: String, password: String) -> Result<UserId, RegError>
 }
 ```
 
-## 9. 验收（conformance）
+## 9. Conformance
 
-任何实现视为合格，当且仅当：
+An implementation is conformant if and only if:
 
-1. [examples/](examples/) 下全部程序通过解析、类型检查与 spec 自检；
-2. [conformance/reject/](conformance/reject/) 下全部程序被拒绝，且拒绝原因与标注一致；
-3. `checked` 层在运行期捕获违反 `pre` / `post` 的调用；
-4. `trusted` 对外调用被拒绝。
+1. every program under [examples/](examples/) passes parsing, type checking, and `spec` self-check;
+2. every program under [conformance/reject/](conformance/reject/) is rejected for the annotated reason;
+3. the `checked` tier catches calls that violate `pre` / `post` at runtime;
+4. calling a `trusted` function from outside its module is rejected.
 
-conformance 用例随仓库维护，是「实现是否合格」的唯一判据。详细清单见 [conformance/README.md](conformance/README.md)。
+The conformance cases are maintained alongside the repository and are the sole judge of conformance. See [conformance/README.md](conformance/README.md).
