@@ -7,8 +7,12 @@ fn main() {
         eprintln!("用法: lemma [run] <文件.lemma>");
         process::exit(2);
     }
-    let mode = if args[1] == "run" { "run" } else { "check" };
-    let path = if mode == "run" { &args[2] } else { &args[1] };
+    let mode = match args[1].as_str() {
+        "run" => "run",
+        "verify" => "verify",
+        _ => "check",
+    };
+    let path = if mode == "check" { &args[1] } else { &args[2] };
     let src = match std::fs::read_to_string(path) {
         Ok(s) => s,
         Err(e) => {
@@ -28,7 +32,7 @@ fn main() {
                 process::exit(1);
             }
         }
-        _ => {
+        "run" => {
             let out = lemma::run(&src);
             if out.starts_with("运行错误") || out.starts_with("类型检查未通过") {
                 eprintln!("{}", out);
@@ -36,6 +40,9 @@ fn main() {
             } else {
                 println!("{}", out);
             }
+        }
+        _ => {
+            println!("{}", lemma::verify(&src));
         }
     }
 }

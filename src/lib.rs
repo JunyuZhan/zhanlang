@@ -3,6 +3,7 @@ mod interp;
 mod lexer;
 mod parser;
 mod typecheck;
+mod verify;
 
 /// 稳定入口：解析并检查一段 Lemma 源码。
 ///
@@ -45,6 +46,28 @@ pub fn run(source: &str) -> String {
                     Ok(msg) => msg,
                     Err(e) => format!("运行错误: {}", e),
                 }
+            }
+        },
+    }
+}
+
+/// M4：最小静态验证。对每个带 `spec` 的函数判断其 `post` 能否被静态证明。
+///
+/// 返回每行一个函数：`verified` 或 `checked`。
+pub fn verify(source: &str) -> String {
+    match lexer::tokenize(source) {
+        Err(e) => format!("词法错误: {}", e),
+        Ok(toks) => match parser::parse(toks) {
+            Err(e) => format!("语法错误: {}", e),
+            Ok(module) => {
+                let results = verify::verify(&module);
+                results
+                    .into_iter()
+                    .map(|(name, ok)| {
+                        format!("{}: {}", name, if ok { "verified" } else { "checked" })
+                    })
+                    .collect::<Vec<_>>()
+                    .join("\n")
             }
         },
     }

@@ -46,3 +46,13 @@ fn run_pure_examples() {
         );
     }
 }
+
+#[test]
+fn verify_max() {
+    let p = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("examples")
+        .join("01-basics.lemma");
+    let src = std::fs::read_to_string(p).unwrap();
+    let out = lemma::verify(&src);
+    assert!(out.contains("max: verified"), "max 应被静态证明，实际:\n{}", out);
+}
