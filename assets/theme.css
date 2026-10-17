@@ -41,7 +41,7 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 32px; }
 }
 .nav .brand { color: var(--ink); font-weight: 500; font-size: 14px; }
 .nav .brand:hover { text-decoration: none; }
-.nav .brand .tri { color: var(--ink); margin-right: 6px; }
+.nav .brand .tri { margin-right: 6px; vertical-align: -2px; }
 .nav .links { display: flex; gap: 20px; font-size: 14px; }
 .nav .links a { color: var(--ink); }
 .nav .spacer { flex: 1; }
