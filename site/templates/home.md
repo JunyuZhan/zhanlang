@@ -3,12 +3,25 @@ title: zhanlang — AI writes, we verify intent
 ---
 
 <div class="hero">
-<p class="eyebrow">A programming language for vibe coding</p>
+<div class="hero-grid">
+<div class="hero-text">
+<p class="eyebrow">A programming language</p>
 <h1>AI writes the implementation, humans and the compiler verify intent.</h1>
+<p class="tagline">An AI-collaborative language built for vibe coding.</p>
 <p class="sub">Every publicly visible function must carry a <code>spec</code>. The <code>spec</code> is the single source of truth — and the intent itself is verified too.</p>
 <div class="cta">
 <a class="btn btn-primary" href="play/">Open the Playground</a>
 <a class="btn btn-ghost" href="spec/">Read the spec</a>
+</div>
+</div>
+<div class="hero-code">
+<pre><code class="language-zhanlang">fn max(a: Int, b: Int) -&gt; Int
+  spec {
+    post result &gt;= a &amp;&amp; result &gt;= b
+    examples { max(1, 2) == 2 }
+  }
+{ if a &gt;= b { a } else { b } }</code></pre>
+</div>
 </div>
 </div>
 

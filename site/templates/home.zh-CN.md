@@ -3,12 +3,25 @@ title: zhanlang（詹语言）— AI 写实现，共同验证意图
 ---
 
 <div class="hero">
-<p class="eyebrow">面向 vibe coding 的编程语言</p>
+<div class="hero-grid">
+<div class="hero-text">
+<p class="eyebrow">编程语言</p>
 <h1>AI 写实现，人和编译器共同验证意图。</h1>
+<p class="tagline">专为 vibe coding 设计的 AI 协同编程语言。</p>
 <p class="sub">每个对外可见的函数必须携带 <code>spec</code>。<code>spec</code> 是唯一真相源——意图本身也是被验证的对象。</p>
 <div class="cta">
 <a class="btn btn-primary" href="../play/">打开 Playground</a>
 <a class="btn btn-ghost" href="../spec/">阅读规格书</a>
+</div>
+</div>
+<div class="hero-code">
+<pre><code class="language-zhanlang">fn max(a: Int, b: Int) -&gt; Int
+  spec {
+    post result &gt;= a &amp;&amp; result &gt;= b
+    examples { max(1, 2) == 2 }
+  }
+{ if a &gt;= b { a } else { b } }</code></pre>
+</div>
 </div>
 </div>
 
