@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>语言规格书 · Lemma</title>
+<title>Language specification · Lemma</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
 <link rel="stylesheet" href="../assets/theme.css">
@@ -12,125 +12,157 @@
 <nav class="nav">
   <a class="brand" href="../"><span class="tri">▲</span>Lemma</a>
   <div class="links">
-    <a href="../spec/">规格书</a>
-    <a href="../white-paper/">白皮书</a>
+    <a href="../spec/">Spec</a>
+    <a href="../white-paper/">Whitepaper</a>
     <a href="../play/">Playground</a>
     <a href="https://github.com/JunyuZhan/Lemma">GitHub</a>
   </div>
+  <div class="spacer"></div>
+  <a href="../zh/spec/">中文</a>
 </nav>
 <div class="doc-layout">
 <aside class="doc-toc">
   <div class="toc-title">目录</div>
   <ul>
-  <li><a href="#lemma-语言规格书" id="toc-lemma-语言规格书">Lemma
-  语言规格书</a>
+  <li><a href="#lemma-language-specification"
+  id="toc-lemma-language-specification">Lemma Language Specification</a>
   <ul>
-  <li><a href="#目录" id="toc-目录">目录</a></li>
-  <li><a href="#词法" id="toc-词法">1. 词法</a>
+  <li><a href="#table-of-contents" id="toc-table-of-contents">Table of
+  contents</a></li>
+  <li><a href="#lexical-structure" id="toc-lexical-structure">1. Lexical
+  structure</a>
   <ul>
-  <li><a href="#注释" id="toc-注释">1.1 注释</a></li>
-  <li><a href="#标识符与关键字" id="toc-标识符与关键字">1.2
-  标识符与关键字</a></li>
-  <li><a href="#字面量" id="toc-字面量">1.3 字面量</a></li>
-  <li><a href="#运算符与分隔符" id="toc-运算符与分隔符">1.4
-  运算符与分隔符</a></li>
+  <li><a href="#comments" id="toc-comments">1.1 Comments</a></li>
+  <li><a href="#identifiers-and-keywords"
+  id="toc-identifiers-and-keywords">1.2 Identifiers and
+  keywords</a></li>
+  <li><a href="#literals" id="toc-literals">1.3 Literals</a></li>
+  <li><a href="#operators-and-delimiters"
+  id="toc-operators-and-delimiters">1.4 Operators and
+  delimiters</a></li>
   </ul></li>
-  <li><a href="#语法" id="toc-语法">2. 语法</a>
+  <li><a href="#syntax" id="toc-syntax">2. Syntax</a>
   <ul>
-  <li><a href="#程序结构" id="toc-程序结构">2.1 程序结构</a></li>
-  <li><a href="#类型声明" id="toc-类型声明">2.2 类型声明</a></li>
-  <li><a href="#函数声明" id="toc-函数声明">2.3 函数声明</a></li>
-  <li><a href="#spec-块" id="toc-spec-块">2.4 spec 块</a></li>
-  <li><a href="#语句与块" id="toc-语句与块">2.5 语句与块</a></li>
-  <li><a href="#类型" id="toc-类型">2.6 类型</a></li>
-  <li><a href="#表达式" id="toc-表达式">2.7 表达式</a></li>
-  <li><a href="#模式" id="toc-模式">2.8 模式</a></li>
+  <li><a href="#program-structure" id="toc-program-structure">2.1
+  Program structure</a></li>
+  <li><a href="#type-declarations" id="toc-type-declarations">2.2 Type
+  declarations</a></li>
+  <li><a href="#function-declarations"
+  id="toc-function-declarations">2.3 Function declarations</a></li>
+  <li><a href="#spec-blocks" id="toc-spec-blocks">2.4 <code>spec</code>
+  blocks</a></li>
+  <li><a href="#statements-and-blocks"
+  id="toc-statements-and-blocks">2.5 Statements and blocks</a></li>
+  <li><a href="#types" id="toc-types">2.6 Types</a></li>
+  <li><a href="#expressions" id="toc-expressions">2.7
+  Expressions</a></li>
+  <li><a href="#patterns" id="toc-patterns">2.8 Patterns</a></li>
   </ul></li>
-  <li><a href="#类型系统" id="toc-类型系统">3. 类型系统</a>
+  <li><a href="#type-system" id="toc-type-system">3. Type system</a>
   <ul>
-  <li><a href="#类型分类" id="toc-类型分类">3.1 类型分类</a></li>
-  <li><a href="#规则" id="toc-规则">3.2 规则</a></li>
-  <li><a href="#空安全" id="toc-空安全">3.3 空安全</a></li>
+  <li><a href="#classification" id="toc-classification">3.1
+  Classification</a></li>
+  <li><a href="#rules" id="toc-rules">3.2 Rules</a></li>
+  <li><a href="#null-safety" id="toc-null-safety">3.3 Null
+  safety</a></li>
   </ul></li>
-  <li><a href="#意图块-spec" id="toc-意图块-spec">4. 意图块 spec</a>
+  <li><a href="#intent-blocks-spec" id="toc-intent-blocks-spec">4.
+  Intent blocks (<code>spec</code>)</a>
   <ul>
-  <li><a href="#构件" id="toc-构件">4.1 构件</a></li>
-  <li><a href="#表达式域" id="toc-表达式域">4.2 表达式域</a></li>
-  <li><a href="#spec-自检构造期强制" id="toc-spec-自检构造期强制">4.3
-  spec 自检（构造期，强制）</a></li>
-  <li><a href="#可见性与省略-spec" id="toc-可见性与省略-spec">4.4
-  可见性与省略 spec</a></li>
+  <li><a href="#components" id="toc-components">4.1 Components</a></li>
+  <li><a href="#expression-domain" id="toc-expression-domain">4.2
+  Expression domain</a></li>
+  <li><a href="#spec-self-check-at-construction-time-mandatory"
+  id="toc-spec-self-check-at-construction-time-mandatory">4.3
+  <code>spec</code> self-check (at construction time,
+  mandatory)</a></li>
+  <li><a href="#visibility-and-omitting-spec"
+  id="toc-visibility-and-omitting-spec">4.4 Visibility and omitting
+  <code>spec</code></a></li>
   </ul></li>
-  <li><a href="#效果系统" id="toc-效果系统">5. 效果系统</a></li>
-  <li><a href="#验证层级" id="toc-验证层级">6. 验证层级</a></li>
-  <li><a href="#标准库最小" id="toc-标准库最小">7.
-  标准库（最小）</a></li>
-  <li><a href="#示例" id="toc-示例">8. 示例</a></li>
-  <li><a href="#验收conformance" id="toc-验收conformance">9.
-  验收（conformance）</a></li>
+  <li><a href="#effect-system" id="toc-effect-system">5. Effect
+  system</a></li>
+  <li><a href="#verification-tiers" id="toc-verification-tiers">6.
+  Verification tiers</a></li>
+  <li><a href="#standard-library-minimal"
+  id="toc-standard-library-minimal">7. Standard library
+  (minimal)</a></li>
+  <li><a href="#examples" id="toc-examples">8. Examples</a></li>
+  <li><a href="#conformance" id="toc-conformance">9.
+  Conformance</a></li>
   </ul></li>
   </ul>
 </aside>
 <article class="doc-content">
-<h1 id="lemma-语言规格书">Lemma 语言规格书</h1>
+<h1 id="lemma-language-specification">Lemma Language Specification</h1>
 <blockquote>
-<p>版本：v0.1</p>
-<p>日期：2026-10-17</p>
-<p>本文是 Lemma
-的规范性定义。实现与本文冲突时以本文为准；本文未定义之处即「未指定」，实现可自行决定但必须在文档中记录。</p>
+<p>Version: v0.1</p>
+<p>Date: 2026-10-17</p>
+<p>This document is the normative definition of Lemma. Where an
+implementation conflicts with this document, this document wins;
+anything left undefined here is “unspecified” and an implementation may
+choose freely, but must document its choice.</p>
 </blockquote>
-<h2 id="目录">目录</h2>
+<p>中文译文见 <a
+href="spec.zh-CN.md">spec.zh-CN.md</a>（非规范，以本英文版为准）。</p>
+<h2 id="table-of-contents">Table of contents</h2>
 <ol type="1">
-<li>词法</li>
-<li>语法</li>
-<li>类型系统</li>
-<li>意图块 spec</li>
-<li>效果系统</li>
-<li>验证层级</li>
-<li>标准库（最小）</li>
-<li>示例</li>
-<li>验收（conformance）</li>
+<li>Lexical structure</li>
+<li>Syntax</li>
+<li>Type system</li>
+<li>Intent blocks (<code>spec</code>)</li>
+<li>Effect system</li>
+<li>Verification tiers</li>
+<li>Standard library (minimal)</li>
+<li>Examples</li>
+<li>Conformance</li>
 </ol>
-<h2 id="词法">1. 词法</h2>
-<h3 id="注释">1.1 注释</h3>
+<h2 id="lexical-structure">1. Lexical structure</h2>
+<h3 id="comments">1.1 Comments</h3>
 <ul>
-<li><code>//</code> 到行尾为行注释。</li>
-<li><code>/*</code> 到最近的 <code>*/</code> 为块注释，不嵌套。</li>
+<li><code>//</code> to end of line is a line comment.</li>
+<li><code>/*</code> to the nearest <code>*/</code> is a block comment;
+it does not nest.</li>
 </ul>
-<h3 id="标识符与关键字">1.2 标识符与关键字</h3>
+<h3 id="identifiers-and-keywords">1.2 Identifiers and keywords</h3>
 <ul>
-<li><p>标识符：<code>[A-Za-z_][A-Za-z0-9_]*</code>。</p></li>
-<li><p>关键字（保留，不能作标识符）：</p>
+<li><p>Identifier: <code>[A-Za-z_][A-Za-z0-9_]*</code>.</p></li>
+<li><p>Keywords (reserved; cannot be used as identifiers):</p>
 <p><code>module type record enum fn spec pre post examples if else match is old modifies events let return todo true false private Int Float Bool String</code></p></li>
-<li><p>大小写敏感。按惯例，类型与构造子以大写开头，变量与函数以小写开头，但语法不强制。</p></li>
+<li><p>Case-sensitive. By convention types and constructors start with
+an uppercase letter and variables and functions with a lowercase letter,
+but the grammar does not enforce this.</p></li>
 </ul>
-<h3 id="字面量">1.3 字面量</h3>
+<h3 id="literals">1.3 Literals</h3>
 <ul>
-<li>整数：<code>[0-9]+</code>，类型 <code>Int</code>（v0.1 实现用 64
-位有符号整数，溢出行为由实现记录）。</li>
-<li>浮点：<code>[0-9]+ "." [0-9]+</code>，类型 <code>Float</code>。</li>
-<li>字符串：<code>"..."</code>，转义序列仅
-<code>\"</code>、<code>\\</code>、<code>\n</code>、<code>\t</code>，类型
-<code>String</code>。</li>
-<li>布尔：<code>true</code>、<code>false</code>。</li>
+<li>Integer: <code>[0-9]+</code>, type <code>Int</code> (v0.1 uses
+64-bit signed integers; overflow behavior is
+implementation-documented).</li>
+<li>Float: <code>[0-9]+ "." [0-9]+</code>, type <code>Float</code>.</li>
+<li>String: <code>"..."</code>; the only escapes are <code>\"</code>,
+<code>\\</code>, <code>\n</code>, <code>\t</code>; type
+<code>String</code>.</li>
+<li>Boolean: <code>true</code>, <code>false</code>.</li>
 </ul>
-<h3 id="运算符与分隔符">1.4 运算符与分隔符</h3>
+<h3 id="operators-and-delimiters">1.4 Operators and delimiters</h3>
 <ul>
-<li>运算符：<code>+ - * / % == != &lt; &lt;= &gt; &gt;= &amp;&amp; || !</code></li>
-<li>分隔符：<code>( ) { } [ ] &lt; &gt; , . : -&gt; =&gt; ? _</code></li>
+<li>Operators:
+<code>+ - * / % == != &lt; &lt;= &gt; &gt;= &amp;&amp; || !</code></li>
+<li>Delimiters:
+<code>( ) { } [ ] &lt; &gt; , . : -&gt; =&gt; ? _</code></li>
 </ul>
-<h2 id="语法">2. 语法</h2>
-<h3 id="程序结构">2.1 程序结构</h3>
+<h2 id="syntax">2. Syntax</h2>
+<h3 id="program-structure">2.1 Program structure</h3>
 <pre class="text"><code>program     := module_decl? decl*
 module_decl := &quot;module&quot; ident
 decl        := type_decl | enum_decl | fn_decl</code></pre>
-<p>一个文件即一个模块；<code>module</code>
-可省略，省略时模块名为文件名。</p>
-<h3 id="类型声明">2.2 类型声明</h3>
+<p>A file is a module; <code>module</code> may be omitted, in which case
+the module name is the file name.</p>
+<h3 id="type-declarations">2.2 Type declarations</h3>
 <pre class="text"><code>type_decl := &quot;type&quot; ident &quot;=&quot; type
 enum_decl := &quot;enum&quot; ident &quot;{&quot; variant (&quot;,&quot; variant)* &quot;}&quot;
 variant   := ident (&quot;(&quot; ident &quot;:&quot; type (&quot;,&quot; ident &quot;:&quot; type)* &quot;)&quot;)?</code></pre>
-<h3 id="函数声明">2.3 函数声明</h3>
+<h3 id="function-declarations">2.3 Function declarations</h3>
 <pre class="text"><code>fn_decl    := &quot;private&quot;? &quot;fn&quot; ident type_params? &quot;(&quot; params? &quot;)&quot; (&quot;-&gt;&quot; type)? effects? body_part? block
 type_params:= &quot;&lt;&quot; ident (&quot;,&quot; ident)* &quot;&gt;&quot;
 params     := param (&quot;,&quot; param)*
@@ -139,28 +171,29 @@ effects    := effect+
 effect     := &quot;io&quot; | &quot;async&quot; | &quot;random&quot; | &quot;time&quot;
 body_part  := spec_block | trusted_note
 trusted_note := &quot;trusted&quot; &quot;(&quot; string &quot;)&quot;</code></pre>
-<p>可见性与 spec 的关系见 §4.4。</p>
-<h3 id="spec-块">2.4 spec 块</h3>
+<p>Visibility and its relation to <code>spec</code> are described in
+§4.4.</p>
+<h3 id="spec-blocks">2.4 <code>spec</code> blocks</h3>
 <pre class="text"><code>spec_block := &quot;spec&quot; &quot;{&quot; spec_item* &quot;}&quot;
 spec_item  := &quot;pre&quot; expr | &quot;post&quot; expr
             | &quot;modifies&quot; ident (&quot;,&quot; ident)*
             | &quot;examples&quot; &quot;{&quot; example* &quot;}&quot;
 example    := expr (&quot;==&quot; expr | &quot;is&quot; pattern)</code></pre>
-<h3 id="语句与块">2.5 语句与块</h3>
+<h3 id="statements-and-blocks">2.5 Statements and blocks</h3>
 <pre class="text"><code>block := &quot;{&quot; stmt* expr? &quot;}&quot;
 stmt  := &quot;let&quot; ident (&quot;:&quot; type)? &quot;=&quot; expr &quot;;&quot;
        | &quot;return&quot; expr? &quot;;&quot;
        | expr &quot;;&quot;</code></pre>
-<p>块的值为其末尾表达式；无末尾表达式时块值为
-<code>()</code>（单元，v0.1 不把单元当普通类型使用，只允许出现在
-<code>return;</code> 语义中）。</p>
-<h3 id="类型">2.6 类型</h3>
+<p>The value of a block is its trailing expression; without one, the
+block yields <code>()</code> (unit). v0.1 does not treat unit as an
+ordinary type; it exists only for <code>return;</code>.</p>
+<h3 id="types">2.6 Types</h3>
 <pre class="text"><code>type     := &quot;Int&quot; | &quot;Float&quot; | &quot;Bool&quot; | &quot;String&quot;
           | ident type_args?
           | type &quot;?&quot;
 type_args:= &quot;&lt;&quot; type (&quot;,&quot; type)* &quot;&gt;&quot;</code></pre>
-<p><code>T?</code> 是 <code>Option&lt;T&gt;</code> 的语法糖。</p>
-<h3 id="表达式">2.7 表达式</h3>
+<p><code>T?</code> is sugar for <code>Option&lt;T&gt;</code>.</p>
+<h3 id="expressions">2.7 Expressions</h3>
 <pre class="text"><code>expr       := if_expr | match_expr | or
 if_expr    := &quot;if&quot; expr block &quot;else&quot; block
 match_expr := &quot;match&quot; expr &quot;{&quot; match_arm (&quot;,&quot; match_arm)* &quot;}&quot;
@@ -175,109 +208,127 @@ postfix    := primary (&quot;(&quot; expr (&quot;,&quot; expr)* &quot;)&quot; | 
 primary    := literal | ident | &quot;(&quot; expr &quot;)&quot; | &quot;todo&quot;
             | ident &quot;{&quot; field (&quot;,&quot; field)* &quot;}&quot;      // 记录字面量
 field      := ident &quot;:&quot; expr</code></pre>
-<p>优先级从低到高：<code>||</code> → <code>&amp;&amp;</code> → 比较 →
-加减 → 乘除余 → 一元 <code>! -</code> → 后缀（调用/字段/索引）→
-主表达式。</p>
-<p><code>ident "(" ... ")"</code>
-同时用于普通函数调用与构造子（<code>Ok(x)</code>、<code>Some(x)</code>、枚举变体）。</p>
-<h3 id="模式">2.8 模式</h3>
+<p>Precedence, low to high: <code>||</code> → <code>&amp;&amp;</code> →
+comparison → addition/subtraction → multiplication/division/remainder →
+unary <code>! -</code> → postfix (call/field/index) → primary.</p>
+<p><code>ident "(" ... ")"</code> covers ordinary function calls as well
+as constructors (<code>Ok(x)</code>, <code>Some(x)</code>, enum
+variants).</p>
+<h3 id="patterns">2.8 Patterns</h3>
 <pre class="text"><code>pattern := &quot;_&quot; | literal | ident (&quot;(&quot; pattern (&quot;,&quot; pattern)* &quot;)&quot;)?</code></pre>
-<p>模式出现在 <code>match</code> 分支与 <code>is</code>
-断言中；<code>ident(p1, ...)</code> 是构造子模式，<code>ident</code>
-单独出现是通配绑定。</p>
-<h2 id="类型系统">3. 类型系统</h2>
-<h3 id="类型分类">3.1 类型分类</h3>
+<p>Patterns appear in <code>match</code> arms and in <code>is</code>
+assertions. <code>ident(p1, ...)</code> is a constructor pattern; a bare
+<code>ident</code> is a wildcard binding.</p>
+<h2 id="type-system">3. Type system</h2>
+<h3 id="classification">3.1 Classification</h3>
 <ul>
-<li>基础类型：<code>Int</code>、<code>Float</code>、<code>Bool</code>、<code>String</code>。</li>
-<li>可选：<code>T?</code>。</li>
-<li>参数化类型：<code>List&lt;T&gt;</code>、<code>Map&lt;K, V&gt;</code>、<code>Result&lt;T, E&gt;</code>。</li>
-<li>记录：<code>record</code>。</li>
-<li>枚举：<code>enum</code>。</li>
-<li>类型别名：<code>type X = T</code>。</li>
+<li>Primitive types: <code>Int</code>, <code>Float</code>,
+<code>Bool</code>, <code>String</code>.</li>
+<li>Optional: <code>T?</code>.</li>
+<li>Parameterized types: <code>List&lt;T&gt;</code>,
+<code>Map&lt;K, V&gt;</code>, <code>Result&lt;T, E&gt;</code>.</li>
+<li>Records: <code>record</code>.</li>
+<li>Enums: <code>enum</code>.</li>
+<li>Type aliases: <code>type X = T</code>.</li>
 </ul>
-<h3 id="规则">3.2 规则</h3>
+<h3 id="rules">3.2 Rules</h3>
 <ul>
-<li>静态、强类型，无隐式转换。<code>Int</code> 与 <code>Float</code>
-之间必须显式转换：<code>Int</code> 提供
-<code>to_float() -&gt; Float</code>，<code>Float</code> 提供
-<code>to_int() -&gt; Int</code>（向零截断）。浮点表示带来的往返精度损失由实现记录，不保证精确。</li>
-<li>泛型不变（invariant），无上界。</li>
-<li><code>T?</code> 必须先解包再当作 <code>T</code> 使用；解包方式是
-<code>match</code> 或 <code>is</code> 断言绑定。</li>
-<li><code>Result&lt;T, E&gt;</code> 的合法构造子是 <code>Ok(T)</code> 与
-<code>Err(E)</code>。</li>
+<li>Static and strongly typed, no implicit conversion. <code>Int</code>
+and <code>Float</code> must be converted explicitly: <code>Int</code>
+has <code>to_float() -&gt; Float</code> and <code>Float</code> has
+<code>to_int() -&gt; Int</code> (truncating toward zero). Round-trip
+precision loss from floating-point representation is
+implementation-documented and not guaranteed.</li>
+<li>Generics are invariant, with no bounds.</li>
+<li>A <code>T?</code> must be unwrapped before it is used as
+<code>T</code>; the only ways to unwrap are <code>match</code> and
+<code>is</code>-assertion binding.</li>
+<li>The legal constructors of <code>Result&lt;T, E&gt;</code> are
+<code>Ok(T)</code> and <code>Err(E)</code>.</li>
 </ul>
-<h3 id="空安全">3.3 空安全</h3>
-<p>任何对 <code>T?</code>
-的直接字段访问或运算都是类型错误。唯一解包途径是
-<code>match</code>：</p>
+<h3 id="null-safety">3.3 Null safety</h3>
+<p>Any direct field access or operation on <code>T?</code> is a type
+error. The only way to unwrap is <code>match</code>:</p>
 <pre class="lemma"><code>match u.age {
   Some(a) =&gt; a &gt;= 18
   None =&gt; false
 }</code></pre>
-<h2 id="意图块-spec">4. 意图块 spec</h2>
-<h3 id="构件">4.1 构件</h3>
+<h2 id="intent-blocks-spec">4. Intent blocks (<code>spec</code>)</h2>
+<h3 id="components">4.1 Components</h3>
 <ul>
-<li><code>pre expr</code>：进入函数前必须成立的条件。</li>
-<li><code>post expr</code>：返回前必须成立的条件，用 <code>result</code>
-指代返回值。</li>
-<li><code>examples</code>：输入输出样例，每条形如
-<code>expr == expr</code> 或 <code>expr is pattern</code>。</li>
-<li><code>modifies x, ...</code>：声明本函数可写的外部状态（框架约束）。</li>
+<li><code>pre expr</code>: a condition that must hold on entry.</li>
+<li><code>post expr</code>: a condition that must hold on return;
+<code>result</code> names the return value.</li>
+<li><code>examples</code>: input/output examples, each of the form
+<code>expr == expr</code> or <code>expr is pattern</code>.</li>
+<li><code>modifies x, ...</code>: declares the external state this
+function may write (frame constraint).</li>
 </ul>
-<h3 id="表达式域">4.2 表达式域</h3>
-<p>spec 表达式默认纯。允许以下特殊形式：</p>
+<h3 id="expression-domain">4.2 Expression domain</h3>
+<p><code>spec</code> expressions are pure by default. The following
+special forms are allowed:</p>
 <ul>
-<li><code>old(expr)</code>：取 <code>expr</code>
-在函数入口处的值；只出现在 <code>post</code> 中。</li>
-<li><code>events</code>：编译器维护的 ghost 事件历史，只出现在
-<code>post</code> 中。</li>
-<li><code>is</code>：模式匹配断言，如
-<code>result is Ok</code>、<code>result is Err(e)</code>、<code>u.age is Some(a)</code>。</li>
+<li><code>old(expr)</code>: the value of <code>expr</code> at function
+entry; allowed only in <code>post</code>.</li>
+<li><code>events</code>: a compiler-maintained ghost event history;
+allowed only in <code>post</code>.</li>
+<li><code>is</code>: a pattern-match assertion,
+e.g. <code>result is Ok</code>, <code>result is Err(e)</code>,
+<code>u.age is Some(a)</code>.</li>
 </ul>
-<p><code>body</code> 中不允许出现
-<code>old</code>、<code>events</code>、<code>is</code>；<code>spec</code>
-中不允许出现 <code>io</code> 等有副作用调用。</p>
-<h3 id="spec-自检构造期强制">4.3 spec 自检（构造期，强制）</h3>
-<p>编译器对每个 spec 执行以下检查，任一失败即拒绝编译：</p>
+<p><code>old</code>, <code>events</code>, and <code>is</code> are not
+allowed in a function body; side-effecting calls such as <code>io</code>
+are not allowed in <code>spec</code>.</p>
+<h3 id="spec-self-check-at-construction-time-mandatory">4.3
+<code>spec</code> self-check (at construction time, mandatory)</h3>
+<p>The compiler performs the following checks on every
+<code>spec</code>; any failure rejects compilation:</p>
 <ol type="1">
-<li><strong>非空洞。</strong> <code>post</code> 不得是恒真式。至少拒绝
-<code>post true</code> 与
-<code>post x == x</code>；更一般的恒真检测为「尽力而为」，未检出不作为错误。</li>
-<li><strong>可达性。</strong> 对 <code>match result { ... }</code>
-形式的 <code>post</code>，每个变体在 <code>pre</code> 成立时须可达；与
-<code>pre</code> 明显矛盾的分支（如 <code>pre price &gt; 0</code> 时出现
-<code>Err(InvalidPrice) =&gt; price &lt;= 0</code>）报错。完全可达性不可判定，v0.1
-只做明显矛盾检测。</li>
-<li><strong>样例一致性。</strong> 每条 example 的输入须满足
-<code>pre</code>；期望输出不得与 <code>post</code>
-矛盾。纯子集内可静态判定；其余在 <code>checked</code>
-层运行时判定。</li>
-<li><strong>引用合法性。</strong> spec
-中出现的标识符必须是：参数、<code>result</code>、内置纯函数，或已声明且带
-spec 的纯函数；未定义即报错。</li>
+<li><strong>Non-vacuity.</strong> A <code>post</code> must not be a
+tautology. At minimum <code>post true</code> and
+<code>post x == x</code> are rejected; more general tautology detection
+is best-effort and a miss is not an error.</li>
+<li><strong>Reachability.</strong> For a <code>post</code> of the form
+<code>match result { ... }</code>, every variant must be reachable when
+<code>pre</code> holds; a branch that obviously contradicts
+<code>pre</code>
+(e.g. <code>Err(InvalidPrice) =&gt; price &lt;= 0</code> while
+<code>pre price &gt; 0</code>) is rejected. Full reachability is
+undecidable; v0.1 detects only obvious contradictions.</li>
+<li><strong>Example consistency.</strong> Each example’s inputs must
+satisfy <code>pre</code>, and its expected output must not contradict
+<code>post</code>. This is decided statically within the pure subset and
+at runtime in the <code>checked</code> tier otherwise.</li>
+<li><strong>Reference legality.</strong> Every identifier in
+<code>spec</code> must be a parameter, <code>result</code>, a built-in
+pure function, or a declared pure function that carries its own
+<code>spec</code>; undefined identifiers are rejected.</li>
 </ol>
-<h3 id="可见性与省略-spec">4.4 可见性与省略 spec</h3>
+<h3 id="visibility-and-omitting-spec">4.4 Visibility and omitting
+<code>spec</code></h3>
 <ul>
-<li>顶层函数默认公开（对外可见）。</li>
-<li>公开函数必须带 <code>spec</code>。</li>
-<li><code>private</code> 函数可带
-<code>spec</code>，也可以省略；省略时必须标注
-<code>trusted("原因")</code>。</li>
-<li><code>trusted</code> 只允许出现在 <code>private</code> 函数上。</li>
+<li>Top-level functions are public (externally visible) by default.</li>
+<li>Public functions must carry a <code>spec</code>.</li>
+<li><code>private</code> functions may carry a <code>spec</code> or omit
+it; omission requires a <code>trusted("reason")</code> annotation.</li>
+<li><code>trusted</code> is allowed only on <code>private</code>
+functions.</li>
 </ul>
-<h2 id="效果系统">5. 效果系统</h2>
-<p>函数默认纯。需要外部能力的函数声明效果：</p>
+<h2 id="effect-system">5. Effect system</h2>
+<p>Functions are pure by default. Functions that need external
+capabilities declare effects:</p>
 <ul>
-<li><code>io</code>：读写外部状态。</li>
-<li><code>async</code>：挂起与并发。</li>
-<li><code>random</code>：非确定性。</li>
-<li><code>time</code>：依赖时钟。</li>
+<li><code>io</code>: reads or writes external state.</li>
+<li><code>async</code>: suspension and concurrency.</li>
+<li><code>random</code>: non-determinism.</li>
+<li><code>time</code>: dependence on the clock.</li>
 </ul>
-<p>效果沿调用图向上传播：纯函数调用声明了 <code>io</code>
-的函数是类型错误。效果是函数类型的一部分。</p>
-<h2 id="验证层级">6. 验证层级</h2>
-<p>构造期验证按强度三级，降级必须显式：</p>
+<p>Effects propagate up the call graph: a pure function calling a
+function that declares <code>io</code> is a type error. Effects are part
+of a function’s type.</p>
+<h2 id="verification-tiers">6. Verification tiers</h2>
+<p>Construction-time verification has three tiers; downgrading must be
+explicit:</p>
 <table>
 <colgroup>
 <col style="width: 33%" />
@@ -286,51 +337,61 @@ spec 的纯函数；未定义即报错。</li>
 </colgroup>
 <thead>
 <tr>
-<th>层级</th>
-<th>含义</th>
-<th>规则</th>
+<th>Tier</th>
+<th>Meaning</th>
+<th>Rule</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>verified</code></td>
-<td>编译器静态证明 spec</td>
-<td>默认目标</td>
+<td>the compiler statically proves the <code>spec</code></td>
+<td>default target</td>
 </tr>
 <tr>
 <td><code>checked</code></td>
-<td>静态证不了，插入运行时断言</td>
-<td>默认兜底</td>
+<td>not statically provable; runtime assertions are inserted</td>
+<td>default fallback</td>
 </tr>
 <tr>
 <td><code>trusted</code></td>
-<td>显式豁免</td>
-<td>写作 <code>trusted("原因")</code>；只允许出现在 <code>private</code>
-且无 spec 的函数上，外部模块调用即错误</td>
+<td>explicit exemption</td>
+<td>written <code>trusted("reason")</code>; allowed only on
+<code>private</code> functions without a <code>spec</code>; calling it
+from another module is an error</td>
 </tr>
 </tbody>
 </table>
-<p>降级顺序固定为「先试 verified，失败落
-checked」，不允许无声降级。任何一层都不会改变 spec
-的语义，只改变验证发生的时间。</p>
-<h2 id="标准库最小">7. 标准库（最小）</h2>
-<p>v0.1 只保证以下内置，其余按未指定。一阶函数与 <code>map</code> /
-<code>filter</code> 等高阶操作 v0.1 不保证。</p>
+<p>The downgrade order is fixed: try <code>verified</code>, fall back to
+<code>checked</code>. Silent downgrade is not allowed. No tier changes
+the meaning of the <code>spec</code>, only when verification
+happens.</p>
+<h2 id="standard-library-minimal">7. Standard library (minimal)</h2>
+<p>v0.1 guarantees only the following built-ins; everything else is
+unspecified. First-class functions and higher-order operations such as
+<code>map</code> / <code>filter</code> are not guaranteed in v0.1.</p>
 <ul>
-<li><code>Int</code>：<code>to_float() -&gt; Float</code>。</li>
-<li><code>Float</code>：<code>to_int() -&gt; Int</code>（向零截断）。</li>
-<li><code>String</code>：<code>len -&gt; Int</code>、<code>contains(String) -&gt; Bool</code>、<code>starts_with(String) -&gt; Bool</code>、<code>ends_with(String) -&gt; Bool</code>。</li>
-<li><code>List&lt;T&gt;</code>：<code>len -&gt; Int</code>、<code>is_empty() -&gt; Bool</code>、<code>get(Int) -&gt; T?</code>。</li>
-<li><code>Map&lt;K,V&gt;</code>：<code>len -&gt; Int</code>、<code>has(K) -&gt; Bool</code>、<code>get(K) -&gt; V?</code>。</li>
-<li><code>Option&lt;T&gt;</code>：构造子 <code>Some</code> /
-<code>None</code>。</li>
-<li><code>Result&lt;T,E&gt;</code>：构造子 <code>Ok</code> /
-<code>Err</code>。</li>
-<li><code>events</code>：ghost
-序列，<code>len -&gt; Int</code>、<code>contains(Event) -&gt; Bool</code>。</li>
+<li><code>Int</code>: <code>to_float() -&gt; Float</code>.</li>
+<li><code>Float</code>: <code>to_int() -&gt; Int</code> (truncating
+toward zero).</li>
+<li><code>String</code>: <code>len -&gt; Int</code>,
+<code>contains(String) -&gt; Bool</code>,
+<code>starts_with(String) -&gt; Bool</code>,
+<code>ends_with(String) -&gt; Bool</code>.</li>
+<li><code>List&lt;T&gt;</code>: <code>len -&gt; Int</code>,
+<code>is_empty() -&gt; Bool</code>, <code>get(Int) -&gt; T?</code>.</li>
+<li><code>Map&lt;K,V&gt;</code>: <code>len -&gt; Int</code>,
+<code>has(K) -&gt; Bool</code>, <code>get(K) -&gt; V?</code>.</li>
+<li><code>Option&lt;T&gt;</code>: constructors <code>Some</code> /
+<code>None</code>.</li>
+<li><code>Result&lt;T,E&gt;</code>: constructors <code>Ok</code> /
+<code>Err</code>.</li>
+<li><code>events</code>: a ghost sequence, <code>len -&gt; Int</code>,
+<code>contains(Event) -&gt; Bool</code>.</li>
 </ul>
-<h2 id="示例">8. 示例</h2>
-<p>可运行的示例见仓库 <a href="examples/">examples/</a>。核心两个：</p>
+<h2 id="examples">8. Examples</h2>
+<p>Runnable examples live in <a href="examples/">examples/</a>. Two core
+ones:</p>
 <pre class="lemma"><code>fn max(a: Int, b: Int) -&gt; Int
   spec {
     post result &gt;= a
@@ -358,24 +419,27 @@ checked」，不允许无声降级。任何一层都不会改变 spec
 {
   todo
 }</code></pre>
-<h2 id="验收conformance">9. 验收（conformance）</h2>
-<p>任何实现视为合格，当且仅当：</p>
+<h2 id="conformance">9. Conformance</h2>
+<p>An implementation is conformant if and only if:</p>
 <ol type="1">
-<li><a href="examples/">examples/</a> 下全部程序通过解析、类型检查与
-spec 自检；</li>
-<li><a href="conformance/reject/">conformance/reject/</a>
-下全部程序被拒绝，且拒绝原因与标注一致；</li>
-<li><code>checked</code> 层在运行期捕获违反 <code>pre</code> /
-<code>post</code> 的调用；</li>
-<li><code>trusted</code> 对外调用被拒绝。</li>
+<li>every program under <a href="examples/">examples/</a> passes
+parsing, type checking, and <code>spec</code> self-check;</li>
+<li>every program under <a
+href="conformance/reject/">conformance/reject/</a> is rejected for the
+annotated reason;</li>
+<li>the <code>checked</code> tier catches calls that violate
+<code>pre</code> / <code>post</code> at runtime;</li>
+<li>calling a <code>trusted</code> function from outside its module is
+rejected.</li>
 </ol>
-<p>conformance 用例随仓库维护，是「实现是否合格」的唯一判据。详细清单见
-<a href="conformance/README.md">conformance/README.md</a>。</p>
+<p>The conformance cases are maintained alongside the repository and are
+the sole judge of conformance. See <a
+href="conformance/README.md">conformance/README.md</a>.</p>
 </article>
 </div>
 <footer class="footer">
-  <a href="https://github.com/JunyuZhan/Lemma">GitHub 仓库</a>
-  <span>内容与 <a href="https://github.com/JunyuZhan/Lemma">origin/main</a> 同步</span>
+  <a href="https://github.com/JunyuZhan/Lemma">GitHub repository</a>
+  <span>Synced from <a href="https://github.com/JunyuZhan/Lemma">origin/main</a></span>
 </footer>
 </body>
 </html>
