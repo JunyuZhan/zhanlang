@@ -1,0 +1,12 @@
+// 拒绝：old 只能出现在 post 中，不能出现在 pre
+module r5
+
+fn f(x: Int) -> Int
+  spec {
+    pre old(x) > 0
+    post result > 0
+    examples { f(1) == 1 }
+  }
+{
+  x
+}

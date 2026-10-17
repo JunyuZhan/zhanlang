@@ -71,12 +71,12 @@ impl<'a> Interp<'a> {
                     }
                     let mut arg_vals = Vec::new();
                     for a in args {
-                        arg_vals.push(self.eval(a, &empty)?);
+                        arg_vals.push(self.eval(a, &empty, &empty)?);
                     }
                     let actual = self.call_fn(f, arg_vals)?;
                     match ex {
                         Example::Eq(_, rhs) => {
-                            let expected = self.eval(rhs, &empty)?;
+                            let expected = self.eval(rhs, &empty, &empty)?;
                             if actual != expected {
                                 return Err(format!(
                                     "样例不符：`{}` 期望 {:?}，实际 {:?}",
@@ -115,22 +115,23 @@ impl<'a> Interp<'a> {
             .zip(args)
             .map(|((n, _), v)| (n.clone(), v))
             .collect();
+        let old_env = env.clone();
 
         if let Some(BodyPart::Spec(spec)) = &f.body_part {
             for p in &spec.pres {
-                let v = self.eval(p, &env)?;
+                let v = self.eval(p, &env, &old_env)?;
                 if !truthy(&v)? {
                     return Err(format!("运行期 pre 违反：`{}`", f.name));
                 }
             }
         }
 
-        let result = self.exec_block(&f.body, &mut env)?;
+        let result = self.exec_block(&f.body, &mut env, &old_env)?;
 
         if let Some(BodyPart::Spec(spec)) = &f.body_part {
             env.insert("result".into(), result.clone());
             for p in &spec.posts {
-                let v = self.eval(p, &env)?;
+                let v = self.eval(p, &env, &old_env)?;
                 if !truthy(&v)? {
                     return Err(format!("运行期 post 违反：`{}`", f.name));
                 }
@@ -139,31 +140,41 @@ impl<'a> Interp<'a> {
         Ok(result)
     }
 
-    fn exec_block(&self, b: &Block, env: &mut HashMap<String, Value>) -> Result<Value, String> {
+    fn exec_block(
+        &self,
+        b: &Block,
+        env: &mut HashMap<String, Value>,
+        old: &HashMap<String, Value>,
+    ) -> Result<Value, String> {
         for s in &b.stmts {
             match s {
                 Stmt::Let { name, value, .. } => {
-                    let v = self.eval(value, env)?;
+                    let v = self.eval(value, env, old)?;
                     env.insert(name.clone(), v);
                 }
                 Stmt::Return(e) => {
                     return match e {
-                        Some(e) => self.eval(e, env),
+                        Some(e) => self.eval(e, env, old),
                         None => Ok(Value::Unit),
                     };
                 }
                 Stmt::Expr(e) => {
-                    self.eval(e, env)?;
+                    self.eval(e, env, old)?;
                 }
             }
         }
         match &b.tail {
-            Some(e) => self.eval(e, env),
+            Some(e) => self.eval(e, env, old),
             None => Ok(Value::Unit),
         }
     }
 
-    fn eval(&self, e: &Expr, env: &HashMap<String, Value>) -> Result<Value, String> {
+    fn eval(
+        &self,
+        e: &Expr,
+        env: &HashMap<String, Value>,
+        old: &HashMap<String, Value>,
+    ) -> Result<Value, String> {
         match e {
             Expr::Int(n) => Ok(Value::Int(*n)),
             Expr::Float(f) => Ok(Value::Float(*f)),
@@ -174,6 +185,9 @@ impl<'a> Interp<'a> {
                 if let Some(v) = env.get(name) {
                     return Ok(v.clone());
                 }
+                if name == "events" {
+                    return Ok(Value::List(Vec::new()));
+                }
                 if name == "None" {
                     return Ok(Value::Opt(None));
                 }
@@ -183,7 +197,7 @@ impl<'a> Interp<'a> {
                 Err(format!("未定义的标识符 `{}`", name))
             }
             Expr::Unary(op, inner) => {
-                let v = self.eval(inner, env)?;
+                let v = self.eval(inner, env, old)?;
                 match (op, v) {
                     (UnOp::Not, Value::Bool(b)) => Ok(Value::Bool(!b)),
                     (UnOp::Neg, Value::Int(n)) => Ok(Value::Int(-n)),
@@ -192,53 +206,53 @@ impl<'a> Interp<'a> {
                 }
             }
             Expr::Binary(op, l, r) => {
-                let lv = self.eval(l, env)?;
+                let lv = self.eval(l, env, old)?;
                 match op {
                     BinOp::And => {
                         if !truthy(&lv)? {
                             return Ok(Value::Bool(false));
                         }
-                        let rv = self.eval(r, env)?;
+                        let rv = self.eval(r, env, old)?;
                         Ok(Value::Bool(truthy(&rv)?))
                     }
                     BinOp::Or => {
                         if truthy(&lv)? {
                             return Ok(Value::Bool(true));
                         }
-                        let rv = self.eval(r, env)?;
+                        let rv = self.eval(r, env, old)?;
                         Ok(Value::Bool(truthy(&rv)?))
                     }
                     _ => {
-                        let rv = self.eval(r, env)?;
+                        let rv = self.eval(r, env, old)?;
                         eval_binary(*op, lv, rv)
                     }
                 }
             }
             Expr::If(cond, then, els) => {
-                let c = self.eval(cond, env)?;
+                let c = self.eval(cond, env, old)?;
                 if truthy(&c)? {
-                    self.exec_block(then, &mut env.clone())
+                    self.exec_block(then, &mut env.clone(), old)
                 } else {
-                    self.exec_block(els, &mut env.clone())
+                    self.exec_block(els, &mut env.clone(), old)
                 }
             }
             Expr::Match(scrut, arms) => {
-                let sv = self.eval(scrut, env)?;
+                let sv = self.eval(scrut, env, old)?;
                 for (pat, arm) in arms {
                     if let Some(bindings) = self.match_pattern(pat, &sv) {
                         let mut arm_env = env.clone();
                         arm_env.extend(bindings);
-                        return self.eval(arm, &arm_env);
+                        return self.eval(arm, &arm_env, old);
                     }
                 }
                 Err("match 无匹配分支".into())
             }
             Expr::Is(lhs, pat) => {
-                let v = self.eval(lhs, env)?;
+                let v = self.eval(lhs, env, old)?;
                 Ok(Value::Bool(self.match_pattern(pat, &v).is_some()))
             }
             Expr::Field(base, name) => {
-                let bv = self.eval(base, env)?;
+                let bv = self.eval(base, env, old)?;
                 match bv {
                     Value::Record(_, fields) => fields
                         .iter()
@@ -250,8 +264,8 @@ impl<'a> Interp<'a> {
                 }
             }
             Expr::Index(base, idx) => {
-                let bv = self.eval(base, env)?;
-                let iv = self.eval(idx, env)?;
+                let bv = self.eval(base, env, old)?;
+                let iv = self.eval(idx, env, old)?;
                 match (bv, iv) {
                     (Value::List(items), Value::Int(i)) => items
                         .get(i as usize)
@@ -263,30 +277,34 @@ impl<'a> Interp<'a> {
             Expr::RecordLit(name, fields) => {
                 let mut vals = Vec::new();
                 for (n, fe) in fields {
-                    vals.push((n.clone(), self.eval(fe, env)?));
+                    vals.push((n.clone(), self.eval(fe, env, old)?));
                 }
                 Ok(Value::Record(name.clone(), vals))
             }
             Expr::List(items) => {
                 let mut vals = Vec::new();
                 for it in items {
-                    vals.push(self.eval(it, env)?);
+                    vals.push(self.eval(it, env, old)?);
                 }
                 Ok(Value::List(vals))
             }
             Expr::Call(callee, args) => {
                 if let Expr::Field(base, method) = &**callee {
-                    let bv = self.eval(base, env)?;
+                    let bv = self.eval(base, env, old)?;
                     let mut av = Vec::new();
                     for a in args {
-                        av.push(self.eval(a, env)?);
+                        av.push(self.eval(a, env, old)?);
                     }
                     return method_call(bv, method, av);
                 }
                 if let Expr::Ident(name) = &**callee {
+                    if name == "old" {
+                        let inner = args.first().ok_or("old 需要一个参数")?;
+                        return self.eval(inner, old, old);
+                    }
                     let mut av = Vec::new();
                     for a in args {
-                        av.push(self.eval(a, env)?);
+                        av.push(self.eval(a, env, old)?);
                     }
                     return self.call_ident(name, av);
                 }
@@ -473,6 +491,10 @@ fn method_call(bv: Value, method: &str, args: Vec<Value>) -> Result<Value, Strin
         },
         (Value::List(items), "len") => Ok(Value::Int(items.len() as i64)),
         (Value::List(items), "is_empty") => Ok(Value::Bool(items.is_empty())),
+        (Value::List(items), "contains") => {
+            let target = args.first().cloned().unwrap_or(Value::Unit);
+            Ok(Value::Bool(items.iter().any(|x| *x == target)))
+        }
         (Value::List(items), "get") => match args.first() {
             Some(Value::Int(i)) => Ok(Value::Opt(
                 items

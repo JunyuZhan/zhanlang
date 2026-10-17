@@ -1,0 +1,14 @@
+// old 语义：post 中 old(x) 指函数入口处的值
+module old_demo
+
+fn f(x: Int) -> Int
+  spec {
+    post old(x) == 1
+    examples {
+      f(1) == 2
+    }
+  }
+{
+  let x = 2;
+  x
+}

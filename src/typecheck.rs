@@ -399,8 +399,12 @@ impl Checker {
                 if spec_ctx == Some(SpecCtx::Post) && name == "result" {
                     return ret.cloned().unwrap_or(Ty::Unknown);
                 }
-                if spec_ctx == Some(SpecCtx::Post) && name == "events" {
-                    return Ty::Named("events".into(), Vec::new());
+                if name == "events" {
+                    if spec_ctx == Some(SpecCtx::Post) {
+                        return Ty::Named("events".into(), Vec::new());
+                    }
+                    self.err("`events` 只能出现在 post 中".into());
+                    return Ty::Unknown;
                 }
                 if self.ctors.contains(name) {
                     return Ty::Unknown;
@@ -560,7 +564,10 @@ impl Checker {
             .map(|a| self.check_expr(a, env, effects, spec_ctx, ret))
             .collect();
         if let Expr::Ident(name) = callee {
-            if spec_ctx.is_some() && name == "old" {
+            if name == "old" {
+                if spec_ctx != Some(SpecCtx::Post) {
+                    self.err("`old` 只能出现在 post 中".into());
+                }
                 return Ty::Unknown;
             }
             if let Some(sig) = self.fns.get(name).cloned() {

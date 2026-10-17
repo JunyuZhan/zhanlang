@@ -18,7 +18,9 @@
 | reject/n1-null-deref.lemma | §3.3 空安全 | 对 `T?` 直接字段访问 |
 | reject/t1-public-no-spec.lemma | §4.4 可见性 | 公开函数缺 spec |
 | reject/t2-trusted-public.lemma | §4.4 / §6 | `trusted` 用在公开函数上 |
+| reject/r5-old-in-pre.lemma | §4.2 状态词汇 | `old` 用在 pre 中 |
+| reject/r6-events-in-body.lemma | §4.2 状态词汇 | `events` 用在函数体中 |
 
 ## 通过用例清单
 
-见 [../examples/](../examples/)：01 纯函数、02 记录与枚举、03 带 IO、04 并发、05 私有 `trusted` 辅助函数。
+见 [../examples/](../examples/)：01 纯函数、02 记录与枚举、03 带 IO、04 并发、05 私有 `trusted` 辅助函数、06 `old` 语义。

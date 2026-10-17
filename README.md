@@ -36,6 +36,6 @@ cargo build
 ./target/debug/lemma verify examples/01-basics.lemma
 ```
 
-已实现：词法、语法、类型检查、效果检查、空安全、spec 自检（非空洞、引用合法性、可见性与 `trusted` 规则）、M2 样例一致性与可达性、M3 解释器与运行时 `pre` / `post` 断言、M4 最小静态验证（`max` 可静态证明，非线性/递归函数回退 `checked`）。
+已实现：词法、语法、类型检查、效果检查、空安全、spec 自检（非空洞、引用合法性、可见性与 `trusted` 规则）、M2 样例一致性与可达性、M3 解释器与运行时 `pre` / `post` 断言、M4 最小静态验证（`max` 可静态证明，非线性/递归函数回退 `checked`）、M5 状态词汇（`old` / `events` / `modifies` 的放置规则与运行时语义）。
 
-待实现：M5 状态词汇（`old` / `modifies` / `events` 的语义与检查）。
+五个里程碑（M1–M5）全部完成。进一步工作：建模外部状态与效果（数据库、IO），让 `modifies` / `events` 在真实副作用中可执行。

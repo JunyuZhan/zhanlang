@@ -186,7 +186,7 @@ match u.age {
 
 spec 表达式默认纯。允许以下特殊形式：
 
-- `old(expr)`：取 `expr` 在函数入口处的值。
+- `old(expr)`：取 `expr` 在函数入口处的值；只出现在 `post` 中。
 - `events`：编译器维护的 ghost 事件历史，只出现在 `post` 中。
 - `is`：模式匹配断言，如 `result is Ok`、`result is Err(e)`、`u.age is Some(a)`。
 

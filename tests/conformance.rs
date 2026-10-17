@@ -32,7 +32,7 @@ fn reject_cases_fail() {
 
 #[test]
 fn run_pure_examples() {
-    for name in ["01-basics", "02-records", "05-private-trusted"] {
+    for name in ["01-basics", "02-records", "05-private-trusted", "06-old"] {
         let p = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("examples")
             .join(format!("{}.lemma", name));

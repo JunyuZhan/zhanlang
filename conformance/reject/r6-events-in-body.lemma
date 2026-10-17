@@ -1,0 +1,11 @@
+// 拒绝：events 只能出现在 post 中，不能出现在函数体
+module r6
+
+fn f(x: Int) -> Int
+  spec {
+    post result > 0
+    examples { f(1) == 1 }
+  }
+{
+  events.len
+}
