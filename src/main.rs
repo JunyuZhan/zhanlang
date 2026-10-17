@@ -1,8 +1,3 @@
-mod ast;
-mod lexer;
-mod parser;
-mod typecheck;
-
 use std::env;
 use std::process;
 
@@ -20,31 +15,12 @@ fn main() {
             process::exit(1);
         }
     };
-    let toks = match lexer::tokenize(&src) {
-        Ok(t) => t,
-        Err(e) => {
-            eprintln!("词法错误: {}", e);
-            process::exit(1);
-        }
-    };
-    if std::env::var("LEMMA_TRACE").as_deref() == Ok("tokens") {
-        for t in &toks {
-            eprintln!("{:?}", t);
-        }
-    }
-    let module = match parser::parse(toks) {
-        Ok(m) => m,
-        Err(e) => {
-            eprintln!("语法错误: {}", e);
-            process::exit(1);
-        }
-    };
-    let errors = typecheck::Checker::new().check(&module);
-    if errors.is_empty() {
+    let out = lemma::check(&src);
+    if out == "OK" {
         println!("OK: {} 通过解析与类型检查", path);
     } else {
-        for e in errors {
-            eprintln!("错误: {}", e);
+        for line in out.lines() {
+            eprintln!("错误: {}", line);
         }
         process::exit(1);
     }

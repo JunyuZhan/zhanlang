@@ -19,7 +19,8 @@ fn max(a: Int, b: Int) -> Int
 fn discount(price: Int, rate: Int) -> Int
   spec {
     pre price > 0
-    pre 0 <= rate <= 100
+    pre rate >= 0
+    pre rate <= 100
     post result == (price * (100 - rate)) / 100
     post result <= price
     examples {

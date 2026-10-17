@@ -217,6 +217,91 @@ impl Checker {
                 }
             }
         }
+        self.check_reachability(f, spec);
+        self.check_example_consistency(f, spec);
+    }
+
+    fn check_reachability(&mut self, f: &FnDecl, spec: &SpecBlock) {
+        for p in &spec.posts {
+            if let Expr::Match(_, arms) = p {
+                for (_, arm) in arms {
+                    if let Expr::Binary(op, lhs, rhs) = arm {
+                        if let Expr::Ident(pname) = &**lhs {
+                            if let Expr::Int(c1) = &**rhs {
+                                let c1 = *c1;
+                                for pre in &spec.pres {
+                                    if let Expr::Binary(op2, l2, r2) = pre {
+                                        if let Expr::Ident(pn2) = &**l2 {
+                                            if pn2 == pname {
+                                                if let Expr::Int(c2) = &**r2 {
+                                                    if contradicts(*op, c1, *op2, *c2) {
+                                                        self.err(format!(
+                                                            "函数 `{}` 的 post 分支与 pre 矛盾，不可达",
+                                                            f.name
+                                                        ));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fn check_example_consistency(&mut self, f: &FnDecl, spec: &SpecBlock) {
+        let empty = HashMap::new();
+        for ex in &spec.examples {
+            match ex {
+                Example::Eq(lhs, rhs) => {
+                    if let Some((name, args)) = as_call(lhs) {
+                        if name == f.name {
+                            let vals: Option<Vec<Value>> =
+                                args.iter().map(|a| eval(a, &empty)).collect();
+                            if let Some(vals) = vals {
+                                let mut env = param_env(&f.params, &vals);
+                                for p in &spec.pres {
+                                    if let Some(Value::Bool(false)) = eval(p, &env) {
+                                        self.err(format!("函数 `{}` 的样例输入不满足 pre", f.name));
+                                    }
+                                }
+                                if let Some(rv) = eval(rhs, &empty) {
+                                    env.insert("result".into(), rv);
+                                    for p in &spec.posts {
+                                        if let Some(Value::Bool(false)) = eval(p, &env) {
+                                            self.err(format!(
+                                                "函数 `{}` 的样例输出与 post 矛盾",
+                                                f.name
+                                            ));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                Example::Is(lhs, _) => {
+                    if let Some((name, args)) = as_call(lhs) {
+                        if name == f.name {
+                            let vals: Option<Vec<Value>> =
+                                args.iter().map(|a| eval(a, &empty)).collect();
+                            if let Some(vals) = vals {
+                                let env = param_env(&f.params, &vals);
+                                for p in &spec.pres {
+                                    if let Some(Value::Bool(false)) = eval(p, &env) {
+                                        self.err(format!("函数 `{}` 的样例输入不满足 pre", f.name));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fn check_block(
@@ -585,5 +670,158 @@ impl Checker {
 
     fn err(&mut self, msg: String) {
         self.errors.push(msg);
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+enum Value {
+    Int(i64),
+    Float(f64),
+    Bool(bool),
+    Str(String),
+}
+
+fn as_call(e: &Expr) -> Option<(&str, &[Expr])> {
+    if let Expr::Call(callee, args) = e {
+        if let Expr::Ident(name) = &**callee {
+            return Some((name.as_str(), args.as_slice()));
+        }
+    }
+    None
+}
+
+fn param_env(params: &[(String, Type)], vals: &[Value]) -> HashMap<String, Value> {
+    params
+        .iter()
+        .zip(vals)
+        .map(|((n, _), v)| (n.clone(), v.clone()))
+        .collect()
+}
+
+fn eval(e: &Expr, env: &HashMap<String, Value>) -> Option<Value> {
+    match e {
+        Expr::Int(n) => Some(Value::Int(*n)),
+        Expr::Float(f) => Some(Value::Float(*f)),
+        Expr::Bool(b) => Some(Value::Bool(*b)),
+        Expr::Str(s) => Some(Value::Str(s.clone())),
+        Expr::Ident(name) => env.get(name).cloned(),
+        Expr::Unary(op, inner) => {
+            let v = eval(inner, env)?;
+            match (op, v) {
+                (UnOp::Not, Value::Bool(b)) => Some(Value::Bool(!b)),
+                (UnOp::Neg, Value::Int(n)) => Some(Value::Int(-n)),
+                (UnOp::Neg, Value::Float(f)) => Some(Value::Float(-f)),
+                _ => None,
+            }
+        }
+        Expr::Binary(op, l, r) => {
+            let lv = eval(l, env)?;
+            let rv = eval(r, env)?;
+            eval_binary(*op, lv, rv)
+        }
+        Expr::Call(callee, args) => {
+            if let Expr::Field(base, method) = &**callee {
+                let bv = eval(base, env)?;
+                let arg_vals: Option<Vec<Value>> = args.iter().map(|a| eval(a, env)).collect();
+                return eval_method(bv, method, arg_vals?);
+            }
+            None
+        }
+        _ => None,
+    }
+}
+
+fn eval_binary(op: BinOp, lv: Value, rv: Value) -> Option<Value> {
+    use BinOp::*;
+    match op {
+        Eq => Some(Value::Bool(lv == rv)),
+        Ne => Some(Value::Bool(lv != rv)),
+        And => match (lv, rv) {
+            (Value::Bool(a), Value::Bool(b)) => Some(Value::Bool(a && b)),
+            _ => None,
+        },
+        Or => match (lv, rv) {
+            (Value::Bool(a), Value::Bool(b)) => Some(Value::Bool(a || b)),
+            _ => None,
+        },
+        Lt | Le | Gt | Ge | Add | Sub | Mul | Div | Mod => {
+            if let (Value::Int(a), Value::Int(b)) = (&lv, &rv) {
+                let (a, b) = (*a, *b);
+                return match op {
+                    Lt => Some(Value::Bool(a < b)),
+                    Le => Some(Value::Bool(a <= b)),
+                    Gt => Some(Value::Bool(a > b)),
+                    Ge => Some(Value::Bool(a >= b)),
+                    Add => Some(Value::Int(a + b)),
+                    Sub => Some(Value::Int(a - b)),
+                    Mul => Some(Value::Int(a * b)),
+                    Div => {
+                        if b == 0 {
+                            None
+                        } else {
+                            Some(Value::Int(a / b))
+                        }
+                    }
+                    Mod => {
+                        if b == 0 {
+                            None
+                        } else {
+                            Some(Value::Int(a % b))
+                        }
+                    }
+                    _ => unreachable!(),
+                };
+            }
+            if let (Value::Float(a), Value::Float(b)) = (&lv, &rv) {
+                let (a, b) = (*a, *b);
+                return match op {
+                    Lt => Some(Value::Bool(a < b)),
+                    Le => Some(Value::Bool(a <= b)),
+                    Gt => Some(Value::Bool(a > b)),
+                    Ge => Some(Value::Bool(a >= b)),
+                    Add => Some(Value::Float(a + b)),
+                    Sub => Some(Value::Float(a - b)),
+                    Mul => Some(Value::Float(a * b)),
+                    Div => Some(Value::Float(a / b)),
+                    Mod => Some(Value::Float(a % b)),
+                    _ => unreachable!(),
+                };
+            }
+            None
+        }
+    }
+}
+
+fn eval_method(bv: Value, method: &str, args: Vec<Value>) -> Option<Value> {
+    match (bv, method) {
+        (Value::Str(s), "len") => Some(Value::Int(s.chars().count() as i64)),
+        (Value::Str(s), "contains") => match args.first() {
+            Some(Value::Str(sub)) => Some(Value::Bool(s.contains(sub))),
+            _ => None,
+        },
+        (Value::Str(s), "starts_with") => match args.first() {
+            Some(Value::Str(sub)) => Some(Value::Bool(s.starts_with(sub))),
+            _ => None,
+        },
+        (Value::Str(s), "ends_with") => match args.first() {
+            Some(Value::Str(sub)) => Some(Value::Bool(s.ends_with(sub))),
+            _ => None,
+        },
+        (Value::Int(n), "to_float") => Some(Value::Float(n as f64)),
+        (Value::Float(f), "to_int") => Some(Value::Int(f as i64)),
+        _ => None,
+    }
+}
+
+fn contradicts(op1: BinOp, c1: i64, op2: BinOp, c2: i64) -> bool {
+    use BinOp::*;
+    match (op1, op2) {
+        (Le, Gt) => c2 >= c1,
+        (Lt, Ge) => c2 >= c1,
+        (Ge, Lt) => c1 >= c2,
+        (Gt, Le) => c1 >= c2,
+        (Eq, Ne) => c1 == c2,
+        (Ne, Eq) => c1 == c2,
+        _ => false,
     }
 }
