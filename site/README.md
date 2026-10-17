@@ -26,7 +26,7 @@ Node ≥ 20 (tests only).
     site/build.sh
     node --test site/tests/abi.test.mjs
     git add -A && git commit -m "chore: sync origin/main and rebuild"
-    git push origin gh-pages
+    git push --force-with-lease origin gh-pages
 
 ## Consistency red line
 
