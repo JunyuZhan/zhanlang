@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>$title$ · Lemma</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
+<link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="../"><span class="tri">▲</span>Lemma</a>
+  <div class="links">
+    <a href="../spec/">规格书</a>
+    <a href="../white-paper/">白皮书</a>
+    <a href="../play/">Playground</a>
+    <a href="https://github.com/JunyuZhan/Lemma">GitHub</a>
+  </div>
+</nav>
+<div class="doc-layout">
+$if(toc)$
+<aside class="doc-toc">
+  <div class="toc-title">目录</div>
+  $toc$
+</aside>
+$endif$
+<article class="doc-content">
+$body$
+</article>
+</div>
+<footer class="footer">
+  <a href="https://github.com/JunyuZhan/Lemma">GitHub 仓库</a>
+  <span>内容与 <a href="https://github.com/JunyuZhan/Lemma">origin/main</a> 同步</span>
+</footer>
+</body>
+</html>
