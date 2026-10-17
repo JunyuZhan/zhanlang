@@ -1,0 +1,6 @@
+// 拒绝：trusted 用在公开函数上（§4.4 / §6）
+module t2
+
+fn helper(x: Int) -> Int trusted("跳过验证") {
+  x + 1
+}

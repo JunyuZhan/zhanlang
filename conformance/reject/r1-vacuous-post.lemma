@@ -1,0 +1,11 @@
+// 拒绝：post 恒真（非空洞性 §4.3-1）
+module r1
+
+fn f(x: Int) -> Int
+  spec {
+    post true
+    examples { f(1) == 1 }
+  }
+{
+  x
+}

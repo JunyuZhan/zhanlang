@@ -1,0 +1,12 @@
+// 拒绝：样例输入不满足 pre（样例一致性 §4.3-3）
+module r3a
+
+fn discount(price: Int, rate: Int) -> Int
+  spec {
+    pre price > 0
+    post result <= price
+    examples { discount(0, 10) == 0 }
+  }
+{
+  todo
+}

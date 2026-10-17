@@ -1,0 +1,18 @@
+// 拒绝：分支与 pre 明显矛盾（可达性 §4.3-2）
+module r2
+
+enum E { A B }
+
+fn f(x: Int) -> Result<Int, E>
+  spec {
+    pre x > 0
+    post match result {
+      Ok(v) => v > 0
+      Err(A) => x <= 0
+      Err(B) => true
+    }
+    examples { f(1) is Ok }
+  }
+{
+  todo
+}

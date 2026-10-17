@@ -30,7 +30,7 @@
 - 标识符：`[A-Za-z_][A-Za-z0-9_]*`。
 - 关键字（保留，不能作标识符）：
 
-  `module type record enum fn spec pre post examples if else match is old modifies events let return todo true false Int Float Bool String`
+  `module type record enum fn spec pre post examples if else match is old modifies events let return todo true false private Int Float Bool String`
 
 - 大小写敏感。按惯例，类型与构造子以大写开头，变量与函数以小写开头，但语法不强制。
 
@@ -69,15 +69,17 @@ variant   := ident ("(" ident ":" type ("," ident ":" type)* ")")?
 ### 2.3 函数声明
 
 ```text
-fn_decl    := "fn" ident type_params? "(" params? ")" ("->" type)? effects? spec_block? block
+fn_decl    := "private"? "fn" ident type_params? "(" params? ")" ("->" type)? effects? body_part? block
 type_params:= "<" ident ("," ident)* ">"
 params     := param ("," param)*
 param      := ident ":" type
 effects    := effect+
 effect     := "io" | "async" | "random" | "time"
+body_part  := spec_block | trusted_note
+trusted_note := "trusted" "(" string ")"
 ```
 
-对外可见的函数必须带 `spec_block`；模块内部私有辅助函数可省略（详见 §4.4）。
+可见性与 spec 的关系见 §4.4。
 
 ### 2.4 spec 块
 
@@ -155,7 +157,7 @@ pattern := "_" | literal | ident ("(" pattern ("," pattern)* ")")?
 
 ### 3.2 规则
 
-- 静态、强类型，无隐式转换。`Int` 与 `Float` 之间必须显式转换（v0.1 暂不提供转换函数，按未指定处理）。
+- 静态、强类型，无隐式转换。`Int` 与 `Float` 之间必须显式转换：`Int` 提供 `to_float() -> Float`，`Float` 提供 `to_int() -> Int`（向零截断）。浮点表示带来的往返精度损失由实现记录，不保证精确。
 - 泛型不变（invariant），无上界。
 - `T?` 必须先解包再当作 `T` 使用；解包方式是 `match` 或 `is` 断言绑定。
 - `Result<T, E>` 的合法构造子是 `Ok(T)` 与 `Err(E)`。
@@ -199,9 +201,12 @@ spec 表达式默认纯。允许以下特殊形式：
 3. **样例一致性。** 每条 example 的输入须满足 `pre`；期望输出不得与 `post` 矛盾。纯子集内可静态判定；其余在 `checked` 层运行时判定。
 4. **引用合法性。** spec 中出现的标识符必须是：参数、`result`、内置纯函数，或已声明且带 spec 的纯函数；未定义即报错。
 
-### 4.4 省略 spec 的例外
+### 4.4 可见性与省略 spec
 
-模块私有函数可省略 spec，写法为在函数上标注 `trusted`（见 §6）。对外 API 一律不得省略。
+- 顶层函数默认公开（对外可见）。
+- 公开函数必须带 `spec`。
+- `private` 函数可带 `spec`，也可以省略；省略时必须标注 `trusted("原因")`。
+- `trusted` 只允许出现在 `private` 函数上。
 
 ## 5. 效果系统
 
@@ -222,20 +227,22 @@ spec 表达式默认纯。允许以下特殊形式：
 |---|---|---|
 | `verified` | 编译器静态证明 spec | 默认目标 |
 | `checked` | 静态证不了，插入运行时断言 | 默认兜底 |
-| `trusted` | 显式豁免 | 写作 `trusted("原因")`；只能出现在模块私有函数，外部模块调用即错误 |
+| `trusted` | 显式豁免 | 写作 `trusted("原因")`；只允许出现在 `private` 且无 spec 的函数上，外部模块调用即错误 |
 
 降级顺序固定为「先试 verified，失败落 checked」，不允许无声降级。任何一层都不会改变 spec 的语义，只改变验证发生的时间。
 
 ## 7. 标准库（最小）
 
-v0.1 只保证以下内置，其余按未指定：
+v0.1 只保证以下内置，其余按未指定。一阶函数与 `map` / `filter` 等高阶操作 v0.1 不保证。
 
-- `List<T>`：`len`、`get(Int) -> T?`、`map(Fn) -> List`。
-- `String`：`len`、`contains(String) -> Bool`。
-- `Map<K,V>`：`get(K) -> V?`。
+- `Int`：`to_float() -> Float`。
+- `Float`：`to_int() -> Int`（向零截断）。
+- `String`：`len -> Int`、`contains(String) -> Bool`、`starts_with(String) -> Bool`、`ends_with(String) -> Bool`。
+- `List<T>`：`len -> Int`、`is_empty() -> Bool`、`get(Int) -> T?`。
+- `Map<K,V>`：`len -> Int`、`has(K) -> Bool`、`get(K) -> V?`。
 - `Option<T>`：构造子 `Some` / `None`。
 - `Result<T,E>`：构造子 `Ok` / `Err`。
-- `events`：ghost 序列，方法 `contains(Event)`。
+- `events`：ghost 序列，`len -> Int`、`contains(Event) -> Bool`。
 
 ## 8. 示例
 
@@ -279,8 +286,8 @@ fn register(email: String, password: String) -> Result<UserId, RegError>
 任何实现视为合格，当且仅当：
 
 1. [examples/](../examples/) 下全部程序通过解析、类型检查与 spec 自检；
-2. 对 §4.3 的四类违规 spec，实现必须报错（以 conformance 用例为准）；
+2. [conformance/reject/](../conformance/reject/) 下全部程序被拒绝，且拒绝原因与标注一致；
 3. `checked` 层在运行期捕获违反 `pre` / `post` 的调用；
 4. `trusted` 对外调用被拒绝。
 
-conformance 用例随仓库维护，是「实现是否合格」的唯一判据。
+conformance 用例随仓库维护，是「实现是否合格」的唯一判据。详细清单见 [conformance/README.md](../conformance/README.md)。

@@ -17,6 +17,7 @@
 - [docs/decisions.md](docs/decisions.md) — 源对话结论纪要
 - [docs/review-notes.md](docs/review-notes.md) — 早期评审与决策依据
 - [examples/](examples/) — 示例程序
+- [conformance/](conformance/) — 实现验收用例
 - docs/experiments/ — 实验记录（待补）
 
 ## 路线图

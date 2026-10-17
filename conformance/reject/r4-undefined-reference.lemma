@@ -1,0 +1,11 @@
+// 拒绝：spec 引用未定义标识符（引用合法性 §4.3-4）
+module r4
+
+fn f(x: Int) -> Int
+  spec {
+    post result == helper(x)
+    examples { f(1) == 1 }
+  }
+{
+  todo
+}

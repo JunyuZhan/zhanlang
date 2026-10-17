@@ -1,0 +1,6 @@
+// 拒绝：公开函数缺 spec（可见性 §4.4）
+module t1
+
+fn helper(x: Int) -> Int {
+  x + 1
+}

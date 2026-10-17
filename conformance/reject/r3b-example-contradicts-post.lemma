@@ -1,0 +1,11 @@
+// 拒绝：样例输出与 post 矛盾（样例一致性 §4.3-3）
+module r3b
+
+fn max(a: Int, b: Int) -> Int
+  spec {
+    post result >= a
+    examples { max(1, 2) == 0 }
+  }
+{
+  todo
+}

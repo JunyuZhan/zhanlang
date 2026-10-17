@@ -1,0 +1,15 @@
+// 拒绝：纯函数调用 io 函数（效果系统 §5）
+module e1
+
+fn read_data() -> Int io {
+  todo
+}
+
+fn caller() -> Int
+  spec {
+    post result >= 0
+    examples { caller() == 0 }
+  }
+{
+  read_data()
+}

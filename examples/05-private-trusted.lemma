@@ -1,0 +1,16 @@
+// 私有 trusted 辅助函数：合法用法
+module private_helper
+
+fn square(x: Int) -> Int
+  spec {
+    post result == x * x
+    examples { square(3) == 9 }
+  }
+{
+  x * x
+}
+
+private fn add_one(x: Int) -> Int trusted("内部辅助，无 spec")
+{
+  x + 1
+}

@@ -1,0 +1,14 @@
+// 拒绝：对 T? 直接字段访问（空安全 §3.3）
+module n1
+
+type P = record {
+  x: Int
+}
+
+fn get_x(p: P?) -> Int
+  spec {
+    examples { get_x(None) == 0 }
+  }
+{
+  p.x
+}
