@@ -29,3 +29,20 @@ fn reject_cases_fail() {
         assert_ne!(lemma::check(&src), "OK", "拒绝用例应报错: {:?}", p);
     }
 }
+
+#[test]
+fn run_pure_examples() {
+    for name in ["01-basics", "02-records", "05-private-trusted"] {
+        let p = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("examples")
+            .join(format!("{}.lemma", name));
+        let src = std::fs::read_to_string(p).unwrap();
+        let out = lemma::run(&src);
+        assert!(
+            out.contains("样例通过"),
+            "{} 应可运行，实际: {}",
+            name,
+            out
+        );
+    }
+}

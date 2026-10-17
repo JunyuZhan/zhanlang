@@ -1,4 +1,5 @@
 mod ast;
+mod interp;
 mod lexer;
 mod parser;
 mod typecheck;
@@ -20,6 +21,29 @@ pub fn check(source: &str) -> String {
                     "OK".to_string()
                 } else {
                     errors.join("\n")
+                }
+            }
+        },
+    }
+}
+
+/// 解析、类型检查并运行程序（M3：`checked` 层在运行期执行 `pre` / `post`）。
+///
+/// 目前以「逐个执行样例」的方式运行：对每个带 `spec` 且函数体不含 `todo` 的函数，
+/// 用样例调用它，进入前检查 `pre`，返回后检查 `post`。
+pub fn run(source: &str) -> String {
+    match lexer::tokenize(source) {
+        Err(e) => format!("词法错误: {}", e),
+        Ok(toks) => match parser::parse(toks) {
+            Err(e) => format!("语法错误: {}", e),
+            Ok(module) => {
+                let errors = typecheck::Checker::new().check(&module);
+                if !errors.is_empty() {
+                    return format!("类型检查未通过:\n{}", errors.join("\n"));
+                }
+                match interp::run(&module) {
+                    Ok(msg) => msg,
+                    Err(e) => format!("运行错误: {}", e),
                 }
             }
         },

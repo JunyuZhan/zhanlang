@@ -32,8 +32,9 @@ M1 解析与类型检查 → M2 spec 自检器 → M3 运行时断言 → M4 最
 ```
 cargo build
 ./target/debug/lemma examples/01-basics.lemma
+./target/debug/lemma run examples/01-basics.lemma
 ```
 
-已实现：词法、语法、类型检查、效果检查、空安全、spec 自检（非空洞、引用合法性、可见性与 `trusted` 规则）。
+已实现：词法、语法、类型检查、效果检查、空安全、spec 自检（非空洞、引用合法性、可见性与 `trusted` 规则）、M2 样例一致性与可达性、M3 解释器与运行时 `pre` / `post` 断言。
 
-待实现：spec 样例一致性求值（M2）、分支可达性（M2）、运行时断言（M3）、最小静态验证（M4）。
+待实现：M4 最小静态验证（`verified` 层级）。
