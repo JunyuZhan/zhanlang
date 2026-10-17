@@ -18,6 +18,8 @@ English version: [README.md](README.md)。
 - [docs/white-paper.zh-CN.md](docs/white-paper.zh-CN.md) — 白皮书译文（规范以英文 [docs/white-paper.md](docs/white-paper.md) 为准）
 - [examples/](examples/) — 示例程序
 - [conformance/](conformance/) — 实现验收用例
+- [CONTRIBUTING.md](CONTRIBUTING.md) — 参与贡献
+- [LICENSE](LICENSE) — MIT
 
 ## 路线图
 

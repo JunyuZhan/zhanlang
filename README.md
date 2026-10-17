@@ -18,6 +18,8 @@ Every publicly visible function must carry a `spec`. The `spec` is the single so
 - [docs/white-paper.md](docs/white-paper.md) — the whitepaper (motivation and first principles)
 - [examples/](examples/) — example programs
 - [conformance/](conformance/) — implementation conformance cases
+- [CONTRIBUTING.md](CONTRIBUTING.md) — how to contribute
+- [LICENSE](LICENSE) — MIT
 
 ## Roadmap
 
