@@ -35,3 +35,15 @@ export PATH="$(dirname "$(rustup which rustc)"):$(dirname "$(rustup which cargo)
 cargo rustc --release --lib --target wasm32-unknown-unknown -- --crate-type cdylib
 cp target/wasm32-unknown-unknown/release/deps/lemma-*.wasm assets/lemma.wasm
 echo "WASM 构建完成: assets/lemma.wasm"
+
+# 5) 首页（示例代码取自 origin/main 的 01-basics 中 fn max 段）
+mkdir -p "$TMP"
+awk '/^fn max/,/^}/' assets/examples/01-basics.lemma > "$TMP/example.lemma"
+awk -v ex="$TMP/example.lemma" '
+  /@@EXAMPLE@@/ { while ((getline line < ex) > 0) print line; close(ex); next }
+  { print }
+' site/templates/home.md > "$TMP/home.md"
+pandoc "$TMP/home.md" --template site/templates/home.html \
+  --metadata basecommit="$(git rev-parse --short origin/main)" \
+  -o index.html
+echo "首页构建完成: index.html"

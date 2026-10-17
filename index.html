@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lemma — AI writes, we verify intent</title>
+<meta name="description" content="Lemma is a programming language for vibe coding: every visible function carries a spec, and the compiler verifies both the implementation and the spec itself.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist/index.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono/index.css">
+<link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="./"><span class="tri">▲</span>Lemma</a>
+  <div class="links">
+    <a href="spec/">Spec</a>
+    <a href="white-paper/">Whitepaper</a>
+    <a href="play/">Playground</a>
+    <a href="https://github.com/JunyuZhan/Lemma">GitHub</a>
+  </div>
+</nav>
+<main>
+<div class="hero">
+<p class="eyebrow">
+A programming language for vibe coding
+</p>
+<h1>
+AI writes the implementation, humans and the compiler verify intent.
+</h1>
+<p class="sub">
+Every publicly visible function must carry a <code>spec</code>. The
+<code>spec</code> is the single source of truth — and the intent itself
+is verified too.
+</p>
+<div class="cta">
+<p><a class="btn btn-primary" href="play/">Open the Playground</a>
+<a class="btn btn-ghost" href="spec/">Read the spec</a></p>
+</div>
+</div>
+<section>
+<p class="eyebrow">
+Core invariant
+</p>
+<h2>
+Three rules, enforced at compile time
+</h2>
+<div class="card-grid">
+<div class="card">
+<h3>
+Visible functions require a spec
+</h3>
+<p>
+Every publicly visible function declares its preconditions,
+postconditions, and examples where it is defined; a public function
+without a spec does not compile.
+</p>
+</div>
+<div class="card">
+<h3>
+The spec is the single source of truth
+</h3>
+<p>
+Docs, comments, and tests stop drifting apart — requirements live next
+to the code and are executable.
+</p>
+</div>
+<div class="card">
+<h3>
+The spec itself is verified
+</h3>
+<p>
+The compiler checks both directions: the implementation satisfies the
+spec, and the spec is non-vacuous, consistent, and reachable.
+</p>
+</div>
+</div>
+</section>
+<section>
+<p class="eyebrow">
+Example
+</p>
+<h2>
+Intent, written into the code
+</h2>
+fn max(a: Int, b: Int) -&gt; Int spec { post result &gt;= a post result
+&gt;= b post result == a || result == b examples { max(1, 2) == 2 max(5,
+5) == 5 max(0, -3) == 0 } } { if a &gt;= b { a } else { b } }
+<p style="margin-top:16px">
+<a href="play/">Keep editing in the Playground →</a>
+</p>
+</section>
+<section>
+<p class="eyebrow">
+Roadmap
+</p>
+<h2>
+Status: M1–M5 complete
+</h2>
+<ul class="roadmap">
+<li>
+M1 Parsing &amp; type checking
+</li>
+<li>
+M2 Spec self-check
+</li>
+<li>
+M3 Runtime assertions
+</li>
+<li>
+M4 Minimal static verification
+</li>
+<li>
+M5 State vocabulary
+</li>
+</ul>
+</section>
+</main>
+<footer class="footer">
+  <a href="https://github.com/JunyuZhan/Lemma">GitHub repository</a>
+  <span class="commit">Baseline origin/main @ c8ac7e5</span>
+</footer>
+</body>
+</html>
