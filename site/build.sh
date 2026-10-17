@@ -29,3 +29,9 @@ pandoc "$TMP/white-paper.md" --standalone --template site/templates/doc.html \
   --toc --metadata title=白皮书 -o white-paper/index.html
 
 echo "文档构建完成: spec/index.html white-paper/index.html"
+
+# 4) WASM 构建（不改 Cargo.toml：命令行注入 cdylib）
+export PATH="$(dirname "$(rustup which rustc)"):$(dirname "$(rustup which cargo)"):$PATH"
+cargo rustc --release --lib --target wasm32-unknown-unknown -- --crate-type cdylib
+cp target/wasm32-unknown-unknown/release/deps/lemma-*.wasm assets/lemma.wasm
+echo "WASM 构建完成: assets/lemma.wasm"
