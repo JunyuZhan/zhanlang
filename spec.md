@@ -246,7 +246,7 @@ v0.1 只保证以下内置，其余按未指定。一阶函数与 `map` / `filte
 
 ## 8. 示例
 
-可运行的示例见仓库 [examples/](../examples/)。核心两个：
+可运行的示例见仓库 [examples/](examples/)。核心两个：
 
 ```lemma
 fn max(a: Int, b: Int) -> Int
@@ -285,9 +285,9 @@ fn register(email: String, password: String) -> Result<UserId, RegError>
 
 任何实现视为合格，当且仅当：
 
-1. [examples/](../examples/) 下全部程序通过解析、类型检查与 spec 自检；
-2. [conformance/reject/](../conformance/reject/) 下全部程序被拒绝，且拒绝原因与标注一致；
+1. [examples/](examples/) 下全部程序通过解析、类型检查与 spec 自检；
+2. [conformance/reject/](conformance/reject/) 下全部程序被拒绝，且拒绝原因与标注一致；
 3. `checked` 层在运行期捕获违反 `pre` / `post` 的调用；
 4. `trusted` 对外调用被拒绝。
 
-conformance 用例随仓库维护，是「实现是否合格」的唯一判据。详细清单见 [conformance/README.md](../conformance/README.md)。
+conformance 用例随仓库维护，是「实现是否合格」的唯一判据。详细清单见 [conformance/README.md](conformance/README.md)。

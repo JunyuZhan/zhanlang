@@ -1,10 +1,10 @@
 # Lemma
 
-一门正在设计中的编程语言，面向 vibe coding：AI 写实现，人和编译器共同验证意图，且意图本身也是被验证的对象。
+一门面向 vibe coding 的编程语言：AI 写实现，人和编译器共同验证意图，且意图本身也是被验证的对象。
 
 ## 状态
 
-语言定义阶段（v0.1 草案）。已有语言规格书，尚无编译器实现。
+语言规格书 v0.1 已完成，编译器尚未开始。当前仓库处于「先文档、后实现」的第一阶段。
 
 ## 核心不变量
 
@@ -12,18 +12,15 @@
 
 ## 目录
 
-- [docs/white-paper.md](docs/white-paper.md) — 白皮书（为什么做这门语言）
-- [docs/spec.md](docs/spec.md) — 语言规格书（完整语法与语义定义）
-- [docs/decisions.md](docs/decisions.md) — 源对话结论纪要
-- [docs/review-notes.md](docs/review-notes.md) — 早期评审与决策依据
+- [spec.md](spec.md) — 语言规格书（语法与语义的规范定义）
+- [docs/white-paper.md](docs/white-paper.md) — 白皮书（设计动机与第一性原理）
 - [examples/](examples/) — 示例程序
 - [conformance/](conformance/) — 实现验收用例
-- docs/experiments/ — 实验记录（待补）
 
 ## 路线图
 
-M1 解析与类型检查 → M2 spec 自检器 → M3 运行时断言 → M4 最小静态验证 → M5 状态词汇。详见规格书第 9 节。
+M1 解析与类型检查 → M2 spec 自检器 → M3 运行时断言 → M4 最小静态验证 → M5 状态词汇。详见 [docs/white-paper.md](docs/white-paper.md) 的路线图一节。
 
-## 如何参与
+## 参与
 
-先读 [docs/white-paper.md](docs/white-paper.md) 了解为什么，再读 [docs/spec.md](docs/spec.md) 了解语言本身。实现与语言定义以规格书为准。
+实现以 [spec.md](spec.md) 为准；提交前先跑通 [examples/](examples/) 与 [conformance/](conformance/)。
