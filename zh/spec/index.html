@@ -83,7 +83,8 @@
 <blockquote>
 <p>版本：v0.1</p>
 <p>日期：2026-10-17</p>
-<p>本译文仅供参考，<strong>以英文版 <a href="spec.md">spec.md</a>
+<p>本译文仅供参考，<strong>以英文版 <a
+href="https://github.com/JunyuZhan/zhanlang/blob/main/spec.md">spec.md</a>
 为规范</strong>。</p>
 </blockquote>
 <h2 id="目录">目录</h2>
@@ -337,7 +338,8 @@ checked」，不允许无声降级。任何一层都不会改变 spec
 序列，<code>len -&gt; Int</code>、<code>contains(Event) -&gt; Bool</code>。</li>
 </ul>
 <h2 id="示例">8. 示例</h2>
-<p>可运行的示例见仓库 <a href="examples/">examples/</a>。核心两个：</p>
+<p>可运行的示例见仓库 <a
+href="https://github.com/JunyuZhan/zhanlang/tree/main/examples">examples/</a>。核心两个：</p>
 <pre class="zhanlang"><code>fn max(a: Int, b: Int) -&gt; Int
   spec {
     post result &gt;= a
@@ -368,16 +370,19 @@ checked」，不允许无声降级。任何一层都不会改变 spec
 <h2 id="验收conformance">9. 验收（conformance）</h2>
 <p>任何实现视为合格，当且仅当：</p>
 <ol type="1">
-<li><a href="examples/">examples/</a> 下全部程序通过解析、类型检查与
-spec 自检；</li>
-<li><a href="conformance/reject/">conformance/reject/</a>
+<li><a
+href="https://github.com/JunyuZhan/zhanlang/tree/main/examples">examples/</a>
+下全部程序通过解析、类型检查与 spec 自检；</li>
+<li><a
+href="https://github.com/JunyuZhan/zhanlang/tree/main/conformance/reject">conformance/reject/</a>
 下全部程序被拒绝，且拒绝原因与标注一致；</li>
 <li><code>checked</code> 层在运行期捕获违反 <code>pre</code> /
 <code>post</code> 的调用；</li>
 <li><code>trusted</code> 对外调用被拒绝。</li>
 </ol>
 <p>conformance 用例随仓库维护，是「实现是否合格」的唯一判据。详细清单见
-<a href="conformance/README.md">conformance/README.md</a>。</p>
+<a
+href="https://github.com/JunyuZhan/zhanlang/blob/main/conformance/README.md">conformance/README.md</a>。</p>
 </article>
 </div>
 <footer class="footer">

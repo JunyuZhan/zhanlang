@@ -111,7 +111,7 @@ anything left undefined here is “unspecified” and an implementation may
 choose freely, but must document its choice.</p>
 </blockquote>
 <p>中文译文见 <a
-href="spec.zh-CN.md">spec.zh-CN.md</a>（非规范，以本英文版为准）。</p>
+href="https://github.com/JunyuZhan/zhanlang/blob/main/spec.zh-CN.md">spec.zh-CN.md</a>（非规范，以本英文版为准）。</p>
 <h2 id="table-of-contents">Table of contents</h2>
 <ol type="1">
 <li>Lexical structure</li>
@@ -397,8 +397,9 @@ toward zero).</li>
 <code>contains(Event) -&gt; Bool</code>.</li>
 </ul>
 <h2 id="examples">8. Examples</h2>
-<p>Runnable examples live in <a href="examples/">examples/</a>. Two core
-ones:</p>
+<p>Runnable examples live in <a
+href="https://github.com/JunyuZhan/zhanlang/tree/main/examples">examples/</a>.
+Two core ones:</p>
 <pre class="zhanlang"><code>fn max(a: Int, b: Int) -&gt; Int
   spec {
     post result &gt;= a
@@ -429,11 +430,12 @@ ones:</p>
 <h2 id="conformance">9. Conformance</h2>
 <p>An implementation is conformant if and only if:</p>
 <ol type="1">
-<li>every program under <a href="examples/">examples/</a> passes
-parsing, type checking, and <code>spec</code> self-check;</li>
 <li>every program under <a
-href="conformance/reject/">conformance/reject/</a> is rejected for the
-annotated reason;</li>
+href="https://github.com/JunyuZhan/zhanlang/tree/main/examples">examples/</a>
+passes parsing, type checking, and <code>spec</code> self-check;</li>
+<li>every program under <a
+href="https://github.com/JunyuZhan/zhanlang/tree/main/conformance/reject">conformance/reject/</a>
+is rejected for the annotated reason;</li>
 <li>the <code>checked</code> tier catches calls that violate
 <code>pre</code> / <code>post</code> at runtime;</li>
 <li>calling a <code>trusted</code> function from outside its module is
@@ -441,7 +443,7 @@ rejected.</li>
 </ol>
 <p>The conformance cases are maintained alongside the repository and are
 the sole judge of conformance. See <a
-href="conformance/README.md">conformance/README.md</a>.</p>
+href="https://github.com/JunyuZhan/zhanlang/blob/main/conformance/README.md">conformance/README.md</a>.</p>
 </article>
 </div>
 <footer class="footer">
