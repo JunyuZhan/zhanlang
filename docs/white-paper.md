@@ -4,9 +4,9 @@
 >
 > Date: 2026-10-17
 >
-> This document explains *why* the language exists. The full syntax and semantics are in [spec.md](../spec.md).
+> This document explains *why* the language exists. The full syntax and semantics are in [spec.md](https://github.com/JunyuZhan/zhanlang/blob/main/spec.md).
 
-中文译文见 [white-paper.zh-CN.md](white-paper.zh-CN.md)。
+中文译文见 [white-paper.zh-CN.md](https://github.com/JunyuZhan/zhanlang/blob/main/docs/white-paper.zh-CN.md)。
 
 ## One sentence
 

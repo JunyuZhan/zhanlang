@@ -4,7 +4,7 @@
 >
 > 日期：2026-10-17
 >
-> 本译文仅供参考，**以英文版 [white-paper.md](white-paper.md) 为规范**。
+> 本译文仅供参考，**以英文版 [white-paper.md](https://github.com/JunyuZhan/zhanlang/blob/main/docs/white-paper.md) 为规范**。
 
 ## 一句话
 

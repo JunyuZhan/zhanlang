@@ -6,7 +6,7 @@
 >
 > This document is the normative definition of zhanlang. Where an implementation conflicts with this document, this document wins; anything left undefined here is "unspecified" and an implementation may choose freely, but must document its choice.
 
-中文译文见 [spec.zh-CN.md](spec.zh-CN.md)（非规范，以本英文版为准）。
+中文译文见 [spec.zh-CN.md](https://github.com/JunyuZhan/zhanlang/blob/main/spec.zh-CN.md)（非规范，以本英文版为准）。
 
 ## Table of contents
 
@@ -248,7 +248,7 @@ v0.1 guarantees only the following built-ins; everything else is unspecified. Fi
 
 ## 8. Examples
 
-Runnable examples live in [examples/](examples/). Two core ones:
+Runnable examples live in [examples/](https://github.com/JunyuZhan/zhanlang/tree/main/examples). Two core ones:
 
 ```zhanlang
 fn max(a: Int, b: Int) -> Int
@@ -287,9 +287,9 @@ fn register(email: String, password: String) -> Result<UserId, RegError>
 
 An implementation is conformant if and only if:
 
-1. every program under [examples/](examples/) passes parsing, type checking, and `spec` self-check;
-2. every program under [conformance/reject/](conformance/reject/) is rejected for the annotated reason;
+1. every program under [examples/](https://github.com/JunyuZhan/zhanlang/tree/main/examples) passes parsing, type checking, and `spec` self-check;
+2. every program under [conformance/reject/](https://github.com/JunyuZhan/zhanlang/tree/main/conformance/reject) is rejected for the annotated reason;
 3. the `checked` tier catches calls that violate `pre` / `post` at runtime;
 4. calling a `trusted` function from outside its module is rejected.
 
-The conformance cases are maintained alongside the repository and are the sole judge of conformance. See [conformance/README.md](conformance/README.md).
+The conformance cases are maintained alongside the repository and are the sole judge of conformance. See [conformance/README.md](https://github.com/JunyuZhan/zhanlang/blob/main/conformance/README.md).
